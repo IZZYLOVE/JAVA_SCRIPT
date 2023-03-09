@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="imgae/x-icon" href="icons/ig-icon.png" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="problemsolving.js" defer></script>
+    <style>
+        myform{
+            width: 100%;
+            max-width: 800px;
+            margin: 20px;
+        }
+
+        textarea{
+            width: 90%;
+            max-width: 800px;
+            height: 60px;
+            margin: 20px;
+
+        }
+        button{
+            width: 90%;
+            max-width: 800px;
+            margin: 20px;
+        }
+    </style>
+
+    <script>
+        
+        // const myarray = [];
+        // const myfunction = function(){
+        //     mytext=document.getElementById('mytext').value;
+        //     myarray.push(mytext);
+        //     const node = document.createElement("li");
+        //     const textnode = document.createTextNode(mytext);
+        //     node.appendChild(textnode);
+        //     document.getElementById("myList").appendChild(node);
+        //     console.log(myarray);
+        // }
+    
+
+    //    let n = prompt('enter number: ');
+    //     let x = 1;
+    //     for(; n > 1; n--){
+    //         console.log(n) 
+    //         x *= n;    
+    //     }  
+    //     alert(x);  
+
+
+    // let n = prompt('enter number: ');
+    //     const myarr = [0, 1];
+    //     for(let i = 2; i < n; i++)
+    //     {
+    //         z = myarr[myarr.length-1] + myarr[myarr.length-2]
+    //         myarr.push(z)
+    //     }
+    //     console.log(myarr)
+
+
+    //     let n = +prompt('enter number: ');
+    //    if(n&1 == 1){
+    //     alert(`${n} is an odd number`);
+    //    }
+    //    else{
+    //    alert(`${n} is an even number`);
+    //    }
+ 
+
+    //    let n = +prompt('enter number: ');
+    //    if((n%2)  === 0){
+
+    //     alert(`${n%2}  ${n} is an even number`);
+    //    }
+    //    else{
+    //    alert(`${n%2} ${n} is an odd number`);
+    //    }   
+  
+  
+
+    //    let n = +prompt('enter number: ');
+    //    !(n%2) && alert(`${n%2}  ${n} is an even number`);
+    //     (n%2) && alert(`${n%2} ${n} is an odd number`); 
+
+
+
+    let n = +prompt('enter number: ');
+    const numways = [1, 2];
+        for (let i = 2; i < n; i++){
+            numways[i] = numways[i-1] + numways[i-2]
+            console.log(numways)
+        }    
+        alert(`number of ways is ${numways[n-1]}`);  
+    </script> 
+</head>
+<body> 
+
+
+   
+       
+            <textarea id="mytext" name="mytext" >nnn</textarea>
+            <br>
+            <button onclick="myfunction()">submit</button>
+       
+    
+
+    
+        <ul id="myList">
+           <li>number1</li>
+
+        </ul>
+
+    <div id="result"></div>
+
+    <div id="result2"></div>
+</body>
+</html>

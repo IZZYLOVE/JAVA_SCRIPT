@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="imgae/x-icon" href="icons/ig-icon.png" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="problemsolving.js" defer></script>
+    <style>
+
+
+        input{
+            width: 90%;
+            max-width: 800px;
+            margin: 20px;
+
+        }
+        button{
+            width: 90%;
+            max-width: 800px;
+            margin: 20px;
+        }
+    </style>
+
+    <script>
+        
+
+        const myfunction = function(){
+            let YOB = +(document.getElementById('mytext').value);
+            let DATE = new Date()
+            let YY = DATE.getFullYear()
+            let age = YY - YOB
+            const node = document.createElement("li");
+            const textnode = document.createTextNode(`${YY} - ${YOB}, AGE = ${age}`);
+            node.appendChild(textnode);
+            document.getElementById("myAge").appendChild(node);
+            console.log(age);
+        }
+
+        
+    
+
+    
+    let DATE = new Date()
+    let YY = DATE.getFullYear()
+    let mm = DATE.getMonth()
+    let dd = DATE.getDay()
+   // console.log(dd.toUTCString('2023')) 
+    console.log(DATE)
+    console.log(YY)
+    console.log(mm)
+    console.log(dd)
+
+
+    // let d = Date()
+    // console.log(d)
+    // console.log(d.toString('2023'))
+    // console.log(d.toString(2023))
+    // //console.log(d.toUTCString('2023')) 
+
+
+    console.log(Math.pow(2,2)) 
+    console.log(Math.random()) 
+
+    </script>
+</head>
+<body>
+
+
+   
+       
+            <input id="mytext" name="mytext" placeholder="ENTER YEAR OF BIRTH" value="" >
+            <br>
+            <button onclick="myfunction()">CHECK AGE</button>
+
+    
+
+    
+
+        <ul id="myAge">
+
+         </ul>
+
+    <div id="result"></div>
+
+    <div id="result2"></div>
+</body>
+</html>
+
+<script>
+
+const video_duration = function () {
+	var duration = myVideoPlayer.duration;
+	
+		var hourst = Math.floor(duration / (60*60));
+		
+		if(hourst>=1){
+		var minuteses = Math.floor(duration-(hourst*60*60));	
+		var minutes = Math.floor(minuteses / 60);	
+		var seconds = Math.floor(minuteses -(minutes*60));
+		
+if(seconds<10){var ps=0;}else{var ps='';}
+if(minutes<10){var pm=0;}else{var pm='';}
+if(hourst<10){var ph=0;}else{var ph='';}
+		
+		meta1.innerHTML = '<b >' +ph+ hourst + ':' +pm+ minutes + ':' +ps+ seconds + 's </b>';
+		
+			
+		}else{
+	
+	var minutes = Math.floor(duration / 60);
+	   
+        var seconds = Math.floor(duration -(minutes*60));  
+	
+if(seconds<10){var ps=0;}else{var ps='';}
+if(minutes<10){var pm=0;}else{var pm='';}
+
+	meta1.innerHTML = '<b >' +pm+ minutes + ':' +ps+ seconds + 's </b>';
+	
+
+	//
+		}
+		
+		
+		
+	}
+
+
+
+
+	var myVideoPlayer1 = document.getElementById('videoz1');
+myVideoPlayer1.onloadstart = function() {
+	
+	var myVideoPlayer = document.getElementById('videoz1');
+	meta1 = document.getElementById('meta1');
+	
+	myVideoPlayer.addEventListener('loadedmetadata', video_duration());
+}
+
+
+</script>
+
+
+
