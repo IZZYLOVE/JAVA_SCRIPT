@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="imgae/x-icon" href="icons/ig-icon.png" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPLE QUIZ WITH JS</title>
+    <script src="quiz.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            useParams();
+          
+            
+        //alert('quiz  wants to call retrieveUserData()')
+            
+        retrieveUserData('http://localhost:8001/StudentsRecords', myId);
+           //try call back fuction for wainting
+           let count =0 
+           let loaded = false
+           console.log("loaded="+loaded)
+        
+
+            if(myScore == 0){
+            retrievedata('http://localhost:8001/exam', ExamId );
+
+            }
+            retrieveOrgName('http://localhost:8001/org')
+
+
+        });
+          
+
+
+    </script>
+   </head>
+
+<body> 
+    <header  >
+        <li  class="orgname" >OrgName</li>
+        <nav class="navHeader" id="navHeader"> 
+        </nav>
+    </header>
+<main> 
+    <div class="cover">
+        <div id='demo' style="display: block;">
+           
+        </div><div id='demo2'  style="display: none;"></div>
+        <div id="head"></div>
+        <div id="body">
+            <h3 style="text-align: center;">WARNING!</h3>
+            <p style="text-align: center; padding:10px">
+                Please once you start, do not refresh this page!<br/> your exam will be over once you finish your questions or your time runs out.
+            </p>
+
+      
+
+        </div>
+        <div id="result"></div>
+        <div id="root">
+            <button onclick="startQuiz()">START</button>
+        </div>
+
+
+
+    </div>
+    <p></p>
+</main>
+    <footer id="footer">
+
+    </footer>
+</body>
+</html>

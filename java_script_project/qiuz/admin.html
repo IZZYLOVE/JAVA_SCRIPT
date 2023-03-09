@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="imgae/x-icon" href="icons/ig-icon.png" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPLE QUIZ WITH JS</title>
+    <script src="admin.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            useAdminsParams();
+            retrieveOrgName('http://localhost:8001/org')
+
+    });
+
+    </script>
+   </head>
+<body> 
+
+    <header >
+        <li onclick='home()'  class="orgname">OrgName</li>
+        <nav class="navHeader">
+            <ul> 
+                <li >
+                    <select id="aExams" onChange="setAdminExamId()">
+                    </select>
+                </li>
+                <li onclick='home()'> STUDENTS</li>
+                <li onclick='home()'> RESULTS</li>
+                <li onclick='home()'> LOGOUT</li>
+
+            </ul>
+        </nav>
+    </header>
+    <main>
+
+        <div id='demo' style="display: flex; justify-content: end; padding: 3px 10px;"></div>
+        <div id='demo2' style="display: block;"></div>
+        
+        <div class="cover">
+        <div id="head">
+            
+        </div>
+        <div id="body">
+            
+        </div>
+        <div id="result"></div>
+        <div id="root">
+            
+        </div>
+    </div>
+</main>
+    <footer id="footer">   
+    </footer>
+</body>
+</html>
