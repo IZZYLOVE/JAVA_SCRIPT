@@ -143,6 +143,7 @@ const checkAdminRecord =function(url=null, id=null){
         const useAdminsParams = function(){
             let params = (new URL(document.location)).searchParams;
             myId = params.get('id');
+            Examid = params.get('ex');
             goRetrieveAdminData()
         }
 
@@ -168,16 +169,16 @@ const retrieveAdminData = function(url, id = null){
     .then(data => {
     //let myArra=Object.values(data)
     // alert('score '+data[0].score)
-    console.log('myResult '+data[0].adminusername);
+    // console.log('myResult '+data[0].adminusername);
     myResult.firstName = data[0].firstName;
     myResult.lastName = data[0].lastName;
     myResult.adminusername = data[0].adminusername;
     myResult.level = data[0].level;
-    console.log('myResult2 '+myResult.adminusername);
+    // console.log('myResult2 '+myResult.adminusername);
     if(use_Update == 'on' && myResult.adminusername !== ''){
      use_Update = 'off'
-    console.log(use_Update)
-    console.log(myResult)
+    // console.log(use_Update)
+    // console.log(myResult)
 
     //alert('name'+myResult.lastName) 
     setAdminData();
@@ -203,7 +204,7 @@ if(myResult.adminusername !== ''){
     demo=document.getElementById('demo');
     demo.innerHTML = `        <nav class="navHeader">
             <ul> 
-                <li onclick='home()'> ADD_QUESTION</li>
+                <li onclick='setQuestion()'> SET_QUESTION</li>
                 <li onclick='setExam()'> SET_EXAM</li>
                 
 
@@ -235,7 +236,7 @@ if (id !== null && id !== 0){
           return res.json();
         })
         .then(data => {
-        console.log(data);
+        //console.log(data);
                                 
         Dataz = data;
         isData ='yes' 
@@ -253,28 +254,37 @@ if (id !== null && id !== 0){
 const adminUseData = function(data){
     
     head=document.getElementById('head');
-    head.innerHTML = `<h3 style="text-align: center;">ALL ${ExamName.toUpperCase()} QUESTIONS</h3>`   
-    
+    body=document.getElementById('body');
+    notice=document.getElementById('notice');    
+    result=document.getElementById('result');
+    root=document.getElementById('root');
+    head.innerHTML = notice.innerHTML = '',
+    result.innerHTML = root.innerHTML = '',
 
+
+    head.innerHTML = `<h3 style="text-align: center;">ALL ${ExamName.toUpperCase()} QUESTIONS</h3>`   
+    body.innerHTML = '',
+    
     data.length > 0 ? (  data.map((datax, i) => {
-    body.innerHTML += `<p><h3>QUESTION ${i+1}</h3>`;
+
+    body.innerHTML += `<p class='examp'><h3>QUESTION ${i+1}</h3>`;
                             
     body.innerHTML += `<label>${datax.question}</label>`;
     body.innerHTML += `<div style="padding:5px;" >
-    <input type="radio" id="option1"  onclick="enablebutton('${i}')"  name="options" value="${datax.option1}">
-    <label for="option1">${datax.option1}</label>
+    <input type="radio" id="option1${i}"  onclick="enablebutton('${i}')"  name="options" value="${datax.option1}">
+    <label for="option1${i}">${datax.option1}</label>
     </div>`;
     body.innerHTML += `<div style="padding:5px;" >
-    <input type="radio" id="option2"  onclick="enablebutton('${i}')"  name="options" value="${datax.option2}">
-    <label for="option2">${datax.option2}</label>
+    <input type="radio" id="option2${i}"  onclick="enablebutton('${i}')"  name="options" value="${datax.option2}">
+    <label for="option2${i}">${datax.option2}</label>
     </div>`;            
     body.innerHTML += `<div style="padding:5px;">
-    <input type="radio" id="option3"  onclick="enablebutton('${i}')"  name="options" value="${datax.option3}">
-    <label for="option3">${datax.option3}</label>
+    <input type="radio" id="option3${i}"  onclick="enablebutton('${i}')"  name="options" value="${datax.option3}">
+    <label for="option3${i}">${datax.option3}</label>
     </div>`;            
     body.innerHTML += `<div style="padding:4px;">
-    <input type="radio" id="option4"  onclick="enablebutton('${i}')"  name="options" value="${datax.option4}">
-    <label for="option4">${datax.option4}</label>
+    <input type="radio" id="option4${i}"  onclick="enablebutton('${i}')"  name="options" value="${datax.option4}">
+    <label for="option4${i}">${datax.option4}</label>
     </div>
                                     
     <button id='mybutton${i}' onclick="deleteItem('http://localhost:8001/quiz/', ${datax.id})" disabled >DELETE</button>
@@ -284,6 +294,7 @@ const adminUseData = function(data){
      })
 
     ) :(
+        notice.innerHTML += 'Please set questions',
         alert('Sorry, no question has been set for this exam')
     )
 }
@@ -298,18 +309,22 @@ const deleteItem = function(url, id){
 }
 
 const setExam = function(){
-    let todocover = document.querySelector(".cover");
-//alert('hrr')
-    
-
-    todocover.innerHTML = `
+    head=document.getElementById('head');
+    body=document.getElementById('body');
+    notice=document.getElementById('notice');    
+    result=document.getElementById('result');
+    root=document.getElementById('root');
+    head.innerHTML = notice.innerHTML = '',
+    result.innerHTML = root.innerHTML = '',
+        
+        body.innerHTML = `
     <div id='isloading' style="text-align: center;"></div>
     <h1>SET EXAM </h1>
     <input  class="coverInput" id="examname" type='text' placeholder="Enter Exam name" />
     <input  class="coverInput"  id="duration" type='text' placeholder="Enter Exam duration in minutes" />
     <input  class="coverInput"  id="numQuestion" type='text' placeholder="Enter munber of questions" />
 
-    <button onclick="checkExam('http://localhost:8001/Exams')">SET</button>
+    <button onclick="checkExam('http://localhost:8001/Exams')"><strong>SET</strong></button>
     `;         
  }
 
@@ -347,7 +362,6 @@ fetchData(url)
 
  }
 
-
  const FetchExamsData = function(url){
     const fetchData = async (url) => {
         await fetch(url)
@@ -366,7 +380,8 @@ fetchData(url)
 
 const listExamsAdmin = function(data){
     aExams=document.getElementById('aExams');
-    console.log(data)  
+    //console.log(data)  
+    
     data.length > 0 ? ( data.map((datax) => {  
         if(datax.adminusername == myResult.adminusername){
             if(Examid == 0){
@@ -374,7 +389,8 @@ const listExamsAdmin = function(data){
                 Examid = datax.id
                 ExamName = datax.exam
             }
-            myExamNames={[datax.id]:datax.exam}
+            myExamNames={...myExamNames, [datax.id]:datax.exam}
+            //console.log(myExamNames)
             aExams.innerHTML += `<option value='${datax.id}'>${datax.exam}</option>`
         }  
     })
@@ -416,8 +432,69 @@ const retrieveOrgName= function(url){
 
 const setAdminExamId = function(){
         Examid=document.getElementById('aExams').value;
-        console.log('new ExamId='+Examid)
         ExamName=myExamNames[Examid]
-        //console.log(ExamName)
+        //location.href = `admin.html?id=${myId}&ex=${Examid}`; 
+        console.log(Examid)
         adminRetrievedata('http://localhost:8001/exam', Examid);
         }
+
+
+ const setQuestion = function(){
+    head=document.getElementById('head');
+    body=document.getElementById('body');
+    notice=document.getElementById('notice');
+    head.innerHTML = notice.innerHTML = '',
+        
+        body.innerHTML = `
+        <div id='isloading' style="text-align: center;"></div>
+        <h1>SET ${ExamName.toUpperCase()} QUESTION </h1>
+        <p> use class='examx' in a div to highlight question parts </p>
+        <input  class="coverInput"  id="question" type='text' placeholder="Enter Exam question" />
+        <input  class="coverInput"  id="option1" type='text' placeholder="Enter option1" />
+        <input  class="coverInput"  id="option2" type='text' placeholder="Enter option2" />
+        <input  class="coverInput"  id="option3" type='text' placeholder="Enter option3" />
+        <input  class="coverInput"  id="option4" type='text' placeholder="Enter option4" />
+        <input  class="coverInput"  id="correctAnswer" type='text' placeholder="Copy and past correct answer" />
+    
+        <button onclick="PostQuestion('http://localhost:8001/exam', ${Examid})"><strong>SET</strong></button>
+        `;         
+}
+        
+const PostQuestion = function(url, exId){
+    question=(document.getElementById('question').value).trim();
+    option1=(document.getElementById('option1').value).trim();
+    option2=(document.getElementById('option2').value).trim();
+    option3=(document.getElementById('option3').value).trim();
+    option4=(document.getElementById('option4').value).trim();
+    Correctanswer=(document.getElementById('correctAnswer').value).trim();
+   //url = url+'/'+examname
+   url = url+exId
+  // alert(url)
+   const MyNewQuestion = {
+        question: question,
+        option1: option1,
+        option2: option2,
+        option3: option3,
+        option4: option4,
+        Correctanswer: Correctanswer
+   }
+   
+   const fetchData = async (url) => {
+       await fetch(url, {method: "POST",
+        headers: {"Content-Type" : "application/json;charset=utf-8"},
+        body: JSON.stringify(MyNewQuestion)
+   })
+    .then(res => {
+        if(!res.ok){
+            throw Error('could not fetch the data for that resource')
+        }
+        return res.json();
+    })
+    .then(data => {
+       console.log(data);
+       location.href = `admin.html?id=${myId}&ex=${Examid}`; 
+
+    })
+   }
+   fetchData(url)           
+}     

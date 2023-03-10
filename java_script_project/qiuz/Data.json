@@ -1,6 +1,7 @@
 {
-  "org":["ORGNAME"],
-
+  "org": [
+    "ORGNAME"
+  ],
   "Admins": [
     {
       "firstName": "kingdom",
@@ -22,9 +23,16 @@
     {
       "adminusername": "kingdomadele",
       "exam": "python3",
-      "duration": "20",
-      "Questions": "10",
+      "duration": "10",
+      "Questions": "5",
       "id": 2
+    },
+    {
+      "adminusername": "kingdomadele",
+      "exam": "node js",
+      "duration": "10",
+      "Questions": "5",
+      "id": 3
     }
   ],
   "StudentsRecords": [
@@ -52,14 +60,121 @@
       "firstName": "kingsley",
       "lastName": "ike",
       "username": "kingsleyike",
-      "isdone": "no",
-      "correct": 0,
+      "isdone": "yes",
+      "correct": 5,
       "wrong": 0,
-      "score": 0,
-      "myExamId": 0,
-      "myExamName": "",
-      "Result": [],
+      "score": 100,
+      "myExamId": "1",
+      "myExamName": "quiz",
+      "Result": [
+        {
+          "myExamName": "quiz",
+          "score": 100,
+          "correct": 5,
+          "wrong": 0
+        }
+      ],
       "id": 2
+    },
+    {
+      "firstName": "king",
+      "lastName": "adel",
+      "username": "kingadel",
+      "isdone": "yes",
+      "correct": 5,
+      "wrong": 0,
+      "score": 100,
+      "myExamId": "2",
+      "myExamName": "python3",
+      "Result": [
+        {
+          "myExamName": "python3",
+          "score": 100,
+          "correct": 5,
+          "wrong": 0
+        }
+      ],
+      "id": 3
+    },
+    {
+      "firstName": "king",
+      "lastName": "ben",
+      "username": "kingben",
+      "isdone": "yes",
+      "correct": 5,
+      "wrong": 0,
+      "score": 100,
+      "myExamId": "2",
+      "myExamName": "python3",
+      "Result": [
+        {
+          "myExamName": "python3",
+          "score": 100,
+          "correct": 5,
+          "wrong": 0
+        }
+      ],
+      "id": 4
+    },
+    {
+      "firstName": "king",
+      "lastName": "green",
+      "username": "kinggreen",
+      "isdone": "yes",
+      "correct": 5,
+      "wrong": 0,
+      "score": 100,
+      "myExamId": "1",
+      "myExamName": "quiz",
+      "Result": [
+        {
+          "myExamName": "quiz",
+          "score": 100,
+          "correct": 5,
+          "wrong": 0
+        }
+      ],
+      "id": 5
+    },
+    {
+      "firstName": "kingsley",
+      "lastName": "adel",
+      "username": "kingsleyadel",
+      "isdone": "yes",
+      "correct": 5,
+      "wrong": 0,
+      "score": 100,
+      "myExamId": "2",
+      "myExamName": "python3",
+      "Result": [
+        {
+          "myExamName": "python3",
+          "score": 100,
+          "correct": 5,
+          "wrong": 0
+        }
+      ],
+      "id": 6
+    },
+    {
+      "firstName": "king",
+      "lastName": "han",
+      "username": "kinghan",
+      "isdone": "yes",
+      "correct": 5,
+      "wrong": 0,
+      "score": 100,
+      "myExamId": "2",
+      "myExamName": "python3",
+      "Result": [
+        {
+          "myExamName": "python3",
+          "score": 100,
+          "correct": 5,
+          "wrong": 0
+        }
+      ],
+      "id": 7
     }
   ],
   "exam1": [
@@ -127,7 +242,80 @@
       "id": 7
     }
   ],
-  "exam2": [],
+  "exam2": [
+    {
+      "question": "What does this command line print? <div class='examx'> >>> print(\"Holberton school\") </div>",
+      "option1": "Holberton",
+      "option2": "‘Holberton school’",
+      "option3": "“Holberton school”",
+      "option4": "Holberton school",
+      "Correctanswer": "Holberton school",
+      "id": 1
+    },
+    {
+      "question": "What does this command line print? <div class='examx'> <p> >>> a = 'Python is cool'</p> <p> >>> print(a[-2]) </p></div>",
+      "option1": "ol",
+      "option2": "Nothing",
+      "option3": "l",
+      "option4": "o",
+      "Correctanswer": "o",
+      "id": 2
+    },
+    {
+      "question": "What does this command line print? <div class='examx'> <p>>>> a = 'Python is cool'</p><p> >>> print(a[:6])</p></div>",
+      "option1": "Pytho",
+      "option2": "is cool",
+      "option3": "Python",
+      "option4": "Python is",
+      "Correctanswer": "Python",
+      "id": 3
+    },
+    {
+      "question": "What does this command line print? <div class='examx'> <p>>>> a = 'Python is cool'</p><p>>>> print(a[7:-5])</p>  </div>",
+      "option1": "is",
+      "option2": "on",
+      "option3": "Python",
+      "option4": "nohtyP",
+      "Correctanswer": "is",
+      "id": 4
+    },
+    {
+      "question": "Who created Python?",
+      "option1": "Julien Barbier",
+      "option2": "Yukihiro Matsumoto",
+      "option3": "Guido van Rossum",
+      "option4": "Yukihiro Barbier",
+      "Correctanswer": "Guido van Rossum",
+      "id": 5
+    },
+    {
+      "question": "What does this command line print? <div class='examx'>>>> print(f\"{98} Battery street, {'San Francisco'}\") </div>",
+      "option1": "'98 Battery street, San Francisco'",
+      "option2": "San Francisco Battery street, 98",
+      "option3": "8 Battery street, San",
+      "option4": "98 Battery street, San Francisco",
+      "Correctanswer": "98 Battery street, San Francisco",
+      "id": 6
+    },
+    {
+      "question": "What does this command line print? <div class='examx'><p>>>> a = \"Python is cool\"</p><p>>>> print(a[4])</p></div>",
+      "option1": "P",
+      "option2": "h",
+      "option3": "n",
+      "option4": "o",
+      "Correctanswer": "o",
+      "id": 7
+    },
+    {
+      "question": "What does this command line print? <div class='examx'>>>> print(f\"{98} Battery street\") </div>",
+      "option1": "98 Battery street",
+      "option2": "8 Battery street",
+      "option3": "f\"98 Battery street\"",
+      "option4": "9 Battery street",
+      "Correctanswer": "98 Battery street",
+      "id": 8
+    }
+  ],
   "exam3": [],
   "exam4": [],
   "exam5": [],

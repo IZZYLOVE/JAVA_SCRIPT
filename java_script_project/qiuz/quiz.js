@@ -271,8 +271,8 @@ const checkAdminRecord =function(url=null, id=null){
                     anAdmin = true;
                    // console.log(datax)
                     console.log('anAdmin='+anAdmin)
-                    // redirect to quiz
-                    location.href = `admin.html?id=${datax.id}`; 
+                    // redirect to admin
+                    location.href = `admin.html?id=${datax.id}&ex=${ExamId}`; 
                     return{anAdmin}
                 }
                 i++;  
@@ -296,9 +296,6 @@ const checkAdminRecord =function(url=null, id=null){
         }
         }
     
-
-
-
 
 const retrievedata = function(url, id = null){
 //alert(url)
@@ -334,14 +331,14 @@ const fetchData = async (url) => {
 
 const useData = function(id){
    // alert('useData bbhh')
-
-
     let data = Dataz;
     //alert(data +' hhh'+id)
     let head = document.getElementById('head');
     let root = document.getElementById('root');
     let body = document.getElementById('body');
-    head.innerHTML = `<h3>QUESTION ${id}</h3>`;
+    let notice=document.getElementById('notice');
+    notice.innerHTML = '',
+    head.innerHTML = `<p class='examp'><h3>QUESTION ${id}</h3>`;
     // data && data.map((data, i) => {
         // console.log(data);
      
@@ -372,7 +369,7 @@ const useData = function(id){
 
             
     id= +id+1;
-            root.innerHTML = `<button id="mybutton" disabled onclick="checkAnswer(${id})"> NEXT>> </button>`;
+            root.innerHTML = `<button id="mybutton" disabled onclick="checkAnswer(${id})"> NEXT>> </button></p>`;
 
         }
         else{
@@ -382,7 +379,7 @@ const useData = function(id){
         body.innerHTML = `<label>THANK YOU FOR PARTICIPATING </label>`;
         root.innerHTML = `<p>Do have a nice day.</p>
                         <button onclick='home()'>HOME</button>`;
-       // alert("useData wants to call computeResult()")
+        //alert("useData wants to call computeResult()")
         mySubmited == 'on'
          computeResult();
         }
@@ -400,10 +397,12 @@ const useData2 = function(id){
     let head = document.getElementById('head');
     let root = document.getElementById('root');
     let body = document.getElementById('body');
+    let notice=document.getElementById('notice');
+    body.innerHTML = '',
     
         head.innerHTML = `<h2>GREAT, ${myResult.firstName.toUpperCase()} ${myResult.lastName.toUpperCase()}</h2>
         <h3>YOU ARE DONE WITH THIS ${ExamName.toUpperCase()} QUIZ/EXAM</h3>`;
-        body.innerHTML = `<label>THANK YOU FOR PARTICIPATING </label>`;
+        notice.innerHTML = `<label>THANK YOU FOR PARTICIPATING </label>`;
         root.innerHTML = `<p>Do have a nice day.</p>
                         <button onclick='home()'> HOME</button>`;
         
@@ -414,7 +413,7 @@ const useData2 = function(id){
 const checkAnswer = function(id){
     // alert(id +' ggg1'+Dataz)
     //console.log('vvv'+Dataz)
-    //alert('ggg2'+Dataz)
+    //alert('checkAnswer')
     let id2 = id - 1;
        if(datax == null){
         datax=[];
@@ -437,17 +436,19 @@ const checkAnswer = function(id){
             break;
         }
     }
+    //alert('saved answer='+datax.Correctanswer)
+
     if(datax.Correctanswer == optionx)
     {
-        //alert('ccdc'+ datax.Correctanswer)
+        //alert('Correct answer')
         vstatus = 'correct';
         myResult.correct += 1;
         myResult.score += 20
         myScore= myResult.score
-       // console.log(myResult);
+        console.log(myResult);
 
     }else{
-        //alert('ggg'+ datax.Correctanswer)
+       // alert('wrong answer')
         vstatus = 'wrong';
         myResult.wrong += 1
        // console.log(myResult);
@@ -482,7 +483,7 @@ useData(id);
 
     
     const useUpdate = function(id){
-       //alert('useUpdate sub='+ mySubmit)
+        //alert('useUpdate sub='+ mySubmit)
         if(myResult.score == 0 && mySubmit == 'off'){mySubmit = 'on'}
         //alert('useUpdate upsub='+ mySubmit )
         
@@ -516,14 +517,14 @@ useData(id);
             return res.json();
         })
         .then(data => {
-           console.log(data);
-           //alert('Thank You For Participating')
+           //console.log(data);
+           location.href = `quiz.html?id=${myId}&ex=${ExamId}&ok=${myScore}`; 
+            //alert('Thank You For Participating')
         })
     }
     fetchData(url)
 }
 }
-
 
 
 const useStartUpdate = function(id){
@@ -576,18 +577,18 @@ const computeResult = function(){
          = `you have ${myResult.correct} correct answer(s) and ${myResult.wrong} wrong answer(s), you scored ${myResult.score}%`;
          console.log(myResult);
         }
-        //alert(myScore +' aa '+ myResult.score)
+        // alert(myScore +' aa '+ myResult.score + 'use_Update ' + use_Update )
         if(myScore > 0 && myResult.score > 0 && use_Update == 'on'){
             //alert(myScore +' computeResult cc '+ myResult.score)
-            //alert('computeResult  wants to call useUpdate()')
+            // alert('computeResult  wants to call useUpdate()')
             useUpdate(myId);
         }
         else if(myScore > 0 && myResult.score > 0 && ok == 0){
-           // alert('computeResult  wants to call useData()')
+            // alert('computeResult  wants to call useData()')
             useData()
         }
         else{
-            //alert('computeResult  wants to call useData2()')
+           // alert('computeResult  wants to call useData2()')
             useData2() 
         }
         // }
@@ -639,7 +640,7 @@ const fetchData = async (url) => {
                 use_Update = 'off'
                 console.log(use_Update)
                 
-                 // alert('retrieveUserData is calling computeResult')  
+            // alert('retrieveUserData is calling computeResult')  
                 computeResult()
             }
         }
@@ -664,8 +665,6 @@ const startQuiz = function(){
     checkAnswer(1)
     //useStartUpdate()
 }
-
-
 
 
 
@@ -816,7 +815,7 @@ if(minutes<10){var pm=0;}else{var pm='';}
     clearInterval(x);
     
     document.getElementById('demo2').innerHTML = 'COUNTDOWN EXPIRED';
-document.getElementById('renew').style.display='none';
+    document.getElementById('renew').style.display='none';
   } 
   
     }
@@ -905,7 +904,7 @@ const listExams = function(data){
 //console.log(data)
     exams=document.getElementById('exams');
 data && data.map((datax) => {    
-    exams.innerHTML += ` <option value='${datax.id}' >${datax.exam}</option>`
+    exams.innerHTML += `<option value='${datax.id}' >${datax.exam}</option>`
 })
 }
 
