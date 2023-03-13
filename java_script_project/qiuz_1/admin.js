@@ -21,15 +21,12 @@ var Examid=0
 var myExamNames={}
 var ExamName = ''
 var ORGNAME = 'OrgName'
-var MYCLASS = ''
-var CLASSID = 0
-var isClass = 0
 
 
 //alert('nh' + myId)
 
 function home(){
-    location.href = `home.html?id=${myId}`;
+    location.href = 'index.html';
     }
 
 
@@ -177,22 +174,15 @@ const retrieveAdminData = function(url, id = null){
     myResult.lastName = data[0].lastName;
     myResult.adminusername = data[0].adminusername;
     myResult.level = data[0].level;
-
-    if(data[0].level >= 10){
-        subMenumenus1=document.getElementById('subMenumenus1');
-        subMenumenus1.innerHTML = `<a href='super.html?id=${myId}&ex=${Examid}'>
-            <li > SUPER&nbsp;ADMIN</li> </a>
-            `
-    }
     // console.log('myResult2 '+myResult.adminusername);
     isloading=document.getElementById('notice');
     isloading.innerHTML = ""
     if(use_Update == 'on' && myResult.adminusername !== ''){
      use_Update = 'off'
     // console.log(use_Update)
-    
+    // console.log(myResult)
 
-
+    //alert('name'+myResult.lastName) 
     setAdminData();
      }
     })
@@ -230,17 +220,6 @@ const setQuizmenus = function(){
                 <li onclick='setExam()'> SET_EXAM</li>
             </ul>
         `  
-    navHeader=document.querySelector('.navHeader');
-    navHeader.innerHTML = ` 
-    <ul> 
-        <li >
-            <select id="aExams" onChange="setAdminExamId()">
-            </select>
-        </li>
-        <li onclick='submenu()'> MENU</li>
-    </ul>
-    `
-    goRetrieveAdminData()
 }
 
 
@@ -249,11 +228,10 @@ const adminRetrievedata = function(url, id = null){
     subMenumenus=document.getElementById('subMenumenus');
     subMenumenus.innerHTML = ` 
             <ul> 
-                <li onclick='setQuestion()'> SET&nbsp;QUESTION</li>
-                <li onclick='setExam()'> SET&nbsp;EXAM</li>
+                <li onclick='setQuestion()'> SET_QUESTION</li>
+                <li onclick='setExam()'> SET_EXAM</li>
             </ul>
         `  
-    
 
 if (id !== null && id !== 0){ 
        // add id to the url to get the target exam
@@ -448,14 +426,11 @@ const listExamsAdmin = function(data){
     adminRetrievedata('http://localhost:8001/exam', Examid);
     }
     
-    const setOrgNane = function(){
-        let orName = document.querySelector(".orgname")
-        orName.innerHTML = ORGNAME
-        if(MYCLASS == ''){
-            MYCLASS = ORGNAME
+const setOrgNane = function(){
+            let orName = document.querySelector(".orgname")
+            orName.innerHTML = ORGNAME
+            setFooter()
         }
-        setFooter()
-    }
     
 const setFooter = function(){
         let DATE = new Date()
@@ -705,22 +680,7 @@ const setHtmlTag = function(val){
 const candidatesRecords = function(){
     hideSubmenu()
     subMenumenus=document.getElementById('subMenumenus');
-    subMenumenus.innerHTML = ` 
-            <ul> 
-                <li onclick='retrieveRecords()'> PRINT&nbsp;RECORDS</li>
-            </ul>
-        `  
-        navHeader=document.querySelector('.navHeader');
-        navHeader.innerHTML = ` 
-        <ul> 
-            <li >
-                <select id="aClasses" onChange="setAdminClassId()">
-                <option value='${0}'>select&nbsp;class</option>
-                </select>
-            </li>
-            <li onclick='submenu()'> MENU</li>
-        </ul>
-        `
+    subMenumenus.innerHTML = ``
 
     head=document.getElementById('head');
     body=document.getElementById('body');
@@ -737,8 +697,7 @@ const candidatesRecords = function(){
 
     </div>
 
-    `;    
-    retrieveRecords()     
+    `;         
  }
 
 const submenu = function(){
@@ -753,54 +712,4 @@ const submenu = function(){
 const hideSubmenu = function(){
     let submenu=document.getElementById('submenu');
         submenu.style.display = 'none'
-}
-
-const retrieveRecords = function(CLASSID){
-    url = 'http://localhost:8001/StudentsRecords'
-
-    const fetchData = async (url) => {
-        await fetch(url)
-        .then(res => {
-            if(!res.ok){
-                throw Error('could not fetch the data for that resource')
-
-            }
-            return res.json();
-        })
-        .then(data => {
-           data ? (data.map((dataz) => {
-            if(dataz.classId == CLASSID){
-                isClass = 1
-
-
-
-            }
-
-            
-           })
-
-          
-           ):(
-            isClass = 2,
-            body=document.getElementById('body'),
-            body.innerHTML += '<p style="text-align: center;">Sorry, No record available! </p>',
-            isloading.innerHTML = ""
-
-           )
-       
-        })
-
-        if(isClass == 0){
-            body=document.getElementById('body'),
-            body.innerHTML += '<p style="text-align: center;">Sorry, No record available for this class, please try another class! </p>'
-            isloading.innerHTML = ""
-
-           }
-
-    }
-    fetchData(url)               
-}
-       
-function logout(){
-    location.href = `index.html?`;
 }

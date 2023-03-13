@@ -180,8 +180,8 @@ const retrieveAdminData = function(url, id = null){
 
     if(data[0].level >= 10){
         subMenumenus1=document.getElementById('subMenumenus1');
-        subMenumenus1.innerHTML = `<a href='super.html?id=${myId}&ex=${Examid}'>
-            <li > SUPER&nbsp;ADMIN</li> </a>
+        subMenumenus1.innerHTML = `<a href='admin.html?id=${myId}&ex=${Examid}'>
+            <li > REGULAR&nbsp;ADMIN</li> </a>
             `
     }
     // console.log('myResult2 '+myResult.adminusername);

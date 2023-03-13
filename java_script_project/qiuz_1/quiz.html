@@ -12,12 +12,11 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             useParams();
-            if(myScore > 0){
-                checkAnswer(1);
-            }
+          
+            
         //alert('quiz  wants to call retrieveUserData()')
-
-           retrieveUserData('http://localhost:8001/StudentsRecords', myId);
+            
+        retrieveUserData('http://localhost:8001/StudentsRecords', myId);
            //try call back fuction for wainting
            let count =0 
            let loaded = false
@@ -25,33 +24,48 @@
         
 
             if(myScore == 0){
-            retrievedata('http://localhost:8001/quiz', 0 );
+            retrievedata('http://localhost:8001/exam', ExamId );
+
             }
+            retrieveOrgName('http://localhost:8001/org')
+
+
         });
           
+
+
     </script>
    </head>
-<body> 
 
-    
+   <body ondblclick="hideSubmenu()"> 
+    <header  >
+        <li  class="orgname" >OrgName</li>
+        <nav class="navHeader" id="navHeader"> 
+        </nav>
+    </header>
+<main> 
     <div class="cover">
         <div id='demo' style="display: block;">
            
         </div><div id='demo2'  style="display: none;"></div>
         <div id="head"></div>
-        <div id="body">
+        <div id="notice">
             <h3 style="text-align: center;">WARNING!</h3>
-            <p style="text-align: center;">
+            <p style="text-align: center; padding:10px">
                 Please once you start, do not refresh this page!<br/> your exam will be over once you finish your questions or your time runs out.
             </p>
         </div>
+        <div id="body"></div>
         <div id="result"></div>
         <div id="root">
             <button onclick="startQuiz()">START</button>
         </div>
 
-
-
     </div>
+    <p></p>
+</main>
+    <footer id="footer">
+
+    </footer>
 </body>
 </html>

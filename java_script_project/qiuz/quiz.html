@@ -16,7 +16,7 @@
             
         //alert('quiz  wants to call retrieveUserData()')
             
-        retrieveUserData('http://localhost:8001/StudentsRecords', myId);
+        retrieveUserData(`http://localhost:8001/StudentsRecords/${myId}`);
            //try call back fuction for wainting
            let count =0 
            let loaded = false
@@ -37,7 +37,7 @@
     </script>
    </head>
 
-<body> 
+   <body ondblclick="hideSubmenu()"> 
     <header  >
         <li  class="orgname" >OrgName</li>
         <nav class="navHeader" id="navHeader"> 

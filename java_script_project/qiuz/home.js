@@ -32,7 +32,6 @@ var ORGNAME = 'OrgName'
 var MYCLASS = ''
 
 
-
 //alert('nh' + myId)
 
 function home(){
@@ -143,7 +142,7 @@ const checkRecord =function(url=null, id=null){
                     // console.log(datax)
                         console.log('aUser='+aUser)
                         // redirect to quiz
-                        location.href = `home.html?id=${datax.id}&ex=${ExamId}&ok=${datax.score}`; 
+                        location.href = `home.html?id=${datax.id}`; 
                         return{aUser}
                     }
                     i++;     
@@ -386,36 +385,6 @@ const checkAdminRecord =function(url=null, id=null){
         }
     
 
-const retrievedata = function(url, id = null){
-//alert(url)
-    
-    if (id !== null && id !== 0){
-        url = url+id
-    }
-//alert(url)
-const fetchData = async (url) => {
-        await fetch(url)
-        .then(res => {
-            if(!res.ok){
-                throw Error('could not fetch the data for that resource')
-            }
-            return res.json();
-        })
-        .then(data => {
-          // console.log(data);
-           shuffleData=data.sort(function(){return Math.random()-0.5;})     
-            data =shuffleData;
-
-            Dataz = data;
-            isData ='yes' 
-        })
-    }
-    fetchData(url)
-
-
-    }
-
-
 
 
 const useData = function(id){
@@ -556,24 +525,13 @@ const checkAnswer = function(id){
 useData(id);
     }
 
-
-
-    const useParams = function(){
+    const useHomeParams = function(){
         let params = (new URL(document.location)).searchParams;
         myId = params.get('id');
-        ok = myScore = params.get('ok');
-        myResult.myExamId=ExamId = params.get('ex');
-        console.log("examId="+ExamId)
-        console.log("myscore="+myScore)
-        console.log("myResult.myExamId="+myResult.myExamId)
-        console.log("ExamId="+ExamId);
-        if(ExamName == ''){
-         retrieveExamData('http://localhost:8001/Exams', ExamId);
-        }
+        retrieveUserData('http://localhost:8001/StudentsRecords', myId);
 
     }
 
-    
     const useUpdate = function(id){
         //alert('useUpdate sub='+ mySubmit)
         if(myResult.score == 0 && mySubmit == 'off'){mySubmit = 'on'}
@@ -583,14 +541,7 @@ useData(id);
             url = 'http://localhost:8001/StudentsRecords';
             //let search= new URLSearchParams({id: myId})
             url = url+'/'+myId
-
-           let newResult=[...myResult.Result, {
-                "myExamName": ExamName,
-                "score": myResult.score,
-                "correct": myResult.correct,
-                "wrong": myResult.wrong 
-            }]
-    
+            //alert(url)
             const fetchData = async (url) => {
            await fetch(url, {method: "PATCH",
             headers: {"Content-Type" : "application/json"},
@@ -601,7 +552,12 @@ useData(id);
                 "isdone": 'yes',
                 "myExamId":ExamId,
                 "myExamName": ExamName,
-                "Result":newResult
+                "Result":[...myResult.Result, {
+                    "myExamName": ExamName,
+                    "score": myResult.score,
+                    "correct": myResult.correct,
+                    "wrong": myResult.wrong
+                }]
             }) 
         })
         .then(res => {
@@ -611,9 +567,9 @@ useData(id);
             return res.json();
         })
         .then(data => {
+           //console.log(data);
+           location.href = `quiz.html?id=${myId}&ex=${ExamId}&ok=${myScore}`; 
             //alert('Thank You For Participating')
-            //console.log(data);
-           //location.href = `quiz.html?id=${myId}&ex=${ExamId}&ok=${myScore}`; 
         })
     }
     fetchData(url)
@@ -632,7 +588,8 @@ const useStartUpdate = function(id){
          url = url+'/'+myId
          alert(url)
          const fetchData = async (url) => {
-            //alert("url= "+url)
+            alert("url= "+url)
+        
          await fetch(url, {method: "PATCH",
          headers: {"Content-Type" : "application/json"},
          body: JSON.stringify({
@@ -686,10 +643,10 @@ const computeResult = function(){
     }
 
 
-const retrieveUserData = function(url, id = null){
-//alert(ExamId+' retrieveUserData ' + id)
-console.log('retrieveUserData')
-        
+const retrieveUserData = function(url, id = null){   
+    notice=document.getElementById('notice');    
+    notice.innerHTML = '...loading...' 
+    
 if (id !== null && id !== 0){
     let search= new URLSearchParams({id: id})
     url = url+'?'+search
@@ -704,35 +661,26 @@ const fetchData = async (url) => {
             return res.json();
         })
         .then(data => {
- 
-           if(ExamId > 0){
-           console.log('myResult '+data.score);
-           myResult.firstName = data.firstName;
-           myResult.lastName = data.lastName;
-           myResult.username = data.username;
-           myResult.myExamId = data.myExamId;
-           myResult.Result = data.Result;
+           console.log('myResult '+data[0].score);
+           myResult.firstName = data[0].firstName;
+           myResult.lastName = data[0].lastName;
+           myResult.middleName = data[0].middleName;
+           myResult.username = data[0].username;
+           myResult.myExamId = data[0].myExamId;
+           myResult.Result = data[0].Result;
 
-            data.Result && data.Result.map((dataz) => {
+           data[0].Result && data[0].Result.map((dataz) => {
             if(dataz.myExamName == ExamName){
                 myResult.correct = dataz.correct;
                 myResult.wrong = dataz.wrong;
                 myResult.score = dataz.score;
 
             }
-           })
-
-           console.log('myResult.score'+myResult.score);
-           console.log('myResult.wrong '+myResult.wrong);
-           console.log('myResult.correct '+myResult.correct);
-           if(use_Update == 'on' && myResult.score > 0){
-                use_Update = 'off'
-                console.log(use_Update)
-                
-            // alert('retrieveUserData is calling computeResult')  
-                computeResult()
-            }
-        }
+            })
+        
+            //setUserData()
+            myRecords()
+        
         })
     }
     fetchData(url)
@@ -740,6 +688,17 @@ const fetchData = async (url) => {
 }
         
  
+// const setUserData = function(){
+//     //alert('lastname'+myResult.lastName)
+//     if(myResult.username !== ''){
+//         demo2=document.getElementById('demo2');
+//         demo2.innerHTML = `<h3 style="text-align: center;">WELCOME ${myResult.firstName.toUpperCase()} ${myResult.middleName.toUpperCase()} ${myResult.lastName.toUpperCase()}</h3>`   
+//         // isloading=document.getElementById('notice');
+//         // isloading.innerHTML = "...loading..."
+//         // FetchExamsData('http://localhost:8001/Exams')
+//     }
+//     }
+
             
 const enablebutton = function(){
     let button = document.getElementById('mybutton');
@@ -758,185 +717,6 @@ const startQuiz = function(){
 
 
 
-            // for the timer
-          //  <div id='demo'><div id='demo'></div><script>
- var x; var myTime; var runCountdown = 'on'
- function countdown(){
-    var expire= myTime;
-             
-              
-              
-    // Get todays date and time
-  var now = new Date().getTime();
-
-  
-  
-  
-  // Find the distance between now an the count down date
-  var distance = expire - now;
-  
-  // Time calculations for days, hours, minutes and seconds
-
- var daysx =  distance / (60 * 60 * 24);
-
-var days=Math.floor(daysx/1000);
-  
-
-if(days>1){
-    
-    //hr 
-    var distance1d = distance - (days*(60 * 60 * 24)*1000);
-    var hoursx = distance1d / ( 60 * 60);
-    var hours = Math.floor(hoursx /1000);
-    
-    //min
-    var distance1h= distance1d - (hours*(60 * 60)*1000);
- var minutesx = (distance1h /  60);		
-var minutes = Math.floor(minutesx /1000);	
-
-//sec
-var distance1m= distance1h - (minutes*(60)*1000);	
-var secondsx = distance1m -(60);	
-var seconds = Math.floor(secondsx/1000);
- 
-if(seconds<10){var ps=0;}else{var ps='';}
-if(minutes<10){var pm=0;}else{var pm='';}
-if(hours<10){var ph=0;}else{var ph='';}
-  
- 
- 
- // Display the result in the element with id='demo'
-  document.getElementById('demo').innerHTML = days + 'days, ' + ph+hours + ':'
-  +pm+minutes+ ':' +ps+seconds + 's ';  	
-}
-
-
-else if(days==1){
-
-    //hr 
-    var distance1d = distance - (days*(60 * 60 * 24)*1000);
-    var hoursx = distance1d / ( 60 * 60);
-    var hours = Math.floor(hoursx /1000);
-    
-    //min
-    var distance1h= distance1d - (hours*(60 * 60)*1000);
- var minutesx = (distance1h /  60);		
-var minutes = Math.floor(minutesx /1000);	
-
-//sec
-var distance1m= distance1h - (minutes*(60)*1000);	
-var secondsx = distance1m -(60);	
-var seconds = Math.floor(secondsx/1000);
- 
-if(seconds<10){var ps=0;}else{var ps='';}
-if(minutes<10){var pm=0;}else{var pm='';}
-if(hours<10){var ph=0;}else{var ph='';}
- 
- 
- 
- // Display the result in the element with id='demo'
-  document.getElementById('demo').innerHTML = days + 'day, ' +ph+hours + ':'
-  +pm+minutes+ ':' +ps+seconds + 's ';  
-  
-        
-}
-
-  
-else if(days<1 & distance>=3601000){
-    
- var hoursx =  distance / (60 * 60 );
-var hours=Math.floor(hoursx/1000);	
-
-//min	
-var distance1h= distance - (hours*(60 * 60)*1000);
- var minutesx = (distance1h /  60);		
-var minutes = Math.floor(minutesx /1000);	
-
-//sec
-var distance1m= distance1h - (minutes*(60)*1000);	
-var secondsx = distance1m -(60);	
-var seconds = Math.floor(secondsx/1000);
-
-
-
-if(seconds<10){var ps=0;}else{var ps='';}
-if(minutes<10){var pm=0;}else{var pm='';}
-if(hours<10){var ph=0;}else{var ph='';}
-
- 
- // Display the result in the element with id='demo'
-  document.getElementById('demo').innerHTML =  ph+hours + ':'
-  +pm+minutes+ ':' +ps+seconds + 's ';  
-  
-
-}
-
-else if( distance < 3601000){
-    
-    //alert( distance )
-    
-    //for minutes
-        
- var minutesx =  distance / (60 );
-var minutes=Math.floor(minutesx /1000);	
-    
-    
-    var distance1m= distance - ((minutes)*60*1000);	
-var seconds = Math.floor(distance1m /1000);
-
-if(seconds<10){var ps=0;}else{var ps='';}
-if(minutes<10){var pm=0;}else{var pm='';}
-
- 
-    
-//alert('minutes: '+minutes+ ' seconds: '+seconds );
-
- // Display the result in the element with id='demo'
-  document.getElementById('demo').innerHTML = pm+minutes+ ':' +ps+seconds + 's ';  
-  
- 
-
-}
-
-
-  // If the count down is finished, write some text 
-  if (distance < 0) {
-    clearInterval(x);
-    
-    document.getElementById('demo2').innerHTML = 'COUNTDOWN EXPIRED';
-    document.getElementById('renew').style.display='none';
-  } 
-  
-    }
-
-//interval control 
-function checkTime(){
-   let nowx = new Date().getTime();
-  // alert( myTime - nowx)
-    if(myTime > nowx){
-        countdown(); 
-    }
-    else if(myTime < nowx && runCountdown == 'on'){
-       // alert("here ww")
-        if(myResult.score == 0){
-            myScore = 1
-            myResult.correct = 1
-            myResult.wrong= TotalQuestion - 1
-            //alert(myScore +' gg'+myResult.correct)
-        }
-        runCountdown = 'off'
-        checkAnswer(myId)
-    }
-}
-
-function fint(){
-x=setInterval('checkTime();' ,1000);
-}
-//fint();
-            
-//timer ends 
-
-
  const FetchExamsData = function(url){
     const fetchData = async (url) => {
         await fetch(url)
@@ -947,45 +727,58 @@ x=setInterval('checkTime();' ,1000);
              return res.json();
          })
          .then(data => {
+            notice=document.getElementById('notice'); 
+            notice.innerHTML = ''
                  listExams(data)
          })
      }
      fetchData(url)                    
 }
 
-const retrieveExamData = function(url, id = null){
-    //alert('retrieveExamData id'+id)
-    if (id !== null && id !== 0){
-        let search= new URLSearchParams({id: id})
-        url = url+'?'+search
-    }
-    const fetchData = async (url) => {
-        await fetch(url)
-         .then(res => {
-             if(!res.ok){
-                 throw Error('could not fetch the data for that resource')
-             }
-             return res.json();
-         })
-         .then(data => {
-            console.log('examData='+data)
+const myRecords = function(url, id = null){
+    //alert('myRecords')
+    hideSubmenu()
+    demo2=document.getElementById('demo2');
+    head=document.getElementById('head');
+    body=document.getElementById('body');
+    notice=document.getElementById('notice');    
+    result=document.getElementById('result');
+    root=document.getElementById('root');
+    head.innerHTML = notice.innerHTML = '',
+    result.innerHTML = root.innerHTML = '',
+ 
 
-    //alert('retrieveExamData nnn'+data[0].exam)
+    demo2.innerHTML = `<h3 style="text-align: center;">WELCOME ${myResult.firstName.toUpperCase()} ${myResult.middleName.toUpperCase()} ${myResult.lastName.toUpperCase()}</h3>
+    `
+    head.innerHTML = `<h3 style="text-align: center;">${myResult.firstName.toUpperCase()} ${myResult.middleName.toUpperCase()} ${myResult.lastName.toUpperCase()}</h3>
+    EXAMS RECORD
+    `   
+ 
+    myResult.Result.length > 0 ? (myResult.Result.map((datax, i) => {  
+        //console.log(datax)
+        i % 2 == 0 ? myMapClass="class='mapBackround1'" : myMapClass="class='mapBackround2'" 
+        body.innerHTML += `
+        <div ${myMapClass}>
+        ${i+1},
+        Exam:<strong>${datax.myExamName}</strong>,
+        Right answer(s):<strong>${datax.correct}</strong>,
+        Wrong answer(s):<strong>${datax.wrong}</strong>,
+        Score:<strong>${datax.score}%</strong>
+        </div>`
 
-            if(ExamId == data[0].id && ExamName == ''){
-                ExamName = data[0].exam;
-                Examtime = data[0].duration;
-                TotalQuestion = data[0].Questions;
-                console.log('retrieveExamData myExamName='+ExamName)
-            }
-            navHeader=document.getElementById('navHeader');
-            navHeader.innerHTML = `<p style="text-align: center;">EXAM: <strong>${ExamName.toUpperCase()} </strong></p>`    
-            if(myScore > 0){
-                checkAnswer(1);  
-            }
-         })
-     }
-     fetchData(url)                    
+
+        
+    })
+    ):(
+        notice.innerHTML = '',
+        body=document.getElementById('body'),
+        body.innerHTML = `
+        <p style="text-align: center; padding:10px">
+        Sorry, You have no exam record yet! <br />
+        Please take an exam
+        </p>
+        `   
+    )
 }
 
 const listExams = function(data){
@@ -1002,7 +795,6 @@ const setExamId = function(){
     //alert('mmm')
     console.log('old ExamId='+ExamId)
     ExamId=document.getElementById('exams').value;
-
     console.log('new ExamId='+ExamId)
     }
 
@@ -1064,6 +856,38 @@ const submenu = function(){
 const hideSubmenu = function(){
     let submenu=document.getElementById('submenu');
         submenu.style.display = 'none'
+}
+
+const MyExams = function(){
+    hideSubmenu()
+    head=document.getElementById('head');
+    body=document.getElementById('body');
+    notice=document.getElementById('notice');    
+    result=document.getElementById('result');
+    root=document.getElementById('root');
+    head.innerHTML = notice.innerHTML = '',
+    result.innerHTML = root.innerHTML = '',
+    notice.innerHTML = '...loading...'
+
+    head.innerHTML = `<h3 style="text-align: center;">${myResult.firstName.toUpperCase()} ${myResult.middleName.toUpperCase()} ${myResult.lastName.toUpperCase()}</h3>
+    ` 
+    body.innerHTML = `
+    <p style="text-align: center; padding:0px 10px">
+    SELECT EXAM
+    </p>
+    <select id="exams" onChange="setExamId()">
+        <option value='0' >Select&nbsp;Exam</option>
+    </select>
+    <div class='buttoncontainer'>                          
+    <button onclick="enterExam()">ENTER EXAM</button>
+    </div>
+    `;  
+    
+    FetchExamsData('http://localhost:8001/Exams')
+ }
+
+const enterExam = function(){
+    location.href = `quiz.html?id=${myId}&ex=${ExamId}&ok=${myScore}`; 
 }
 
 function logout(){

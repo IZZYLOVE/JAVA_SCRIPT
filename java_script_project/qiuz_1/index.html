@@ -11,26 +11,33 @@
 
 
 </head>
-<body> 
+<body ondblclick="hideSubmenu()"> 
     <header  >
-        <li onclick='home()'>ORGNAME</li>
-    
+        <li onclick='home()' class="orgname">OrgName</li>
         <nav class="navHeader">
+            <li onclick='submenu()'> MENU</li>
+
         </nav>
     </header>
     <main>
+        <div id="submenu">
+            <div id="subMenumenus"></div>
+            <li onclick="asCandidate()">CANDITATE</li>
+            <li onclick="asAdmin()">ADMIN</li>
+        </div>
     <div class="todocover">
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             asCandidate();
+          
+            retrieveOrgName('http://localhost:8001/org')
         });
     </script>
 
     
 </main>
-<footer>
-
+<footer id="footer">
 </footer>
 </body>
 </html>

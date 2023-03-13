@@ -1,6 +1,5 @@
 var myResult={
     firstName: '',
-    middleName:'',
     lastName: '',
     username: '',
     isdone: 'no',
@@ -29,14 +28,12 @@ var ExamId = 0
 var ExamName = ''
 var Examtime = 0;
 var ORGNAME = 'OrgName'
-var MYCLASS = ''
-
 
 
 //alert('nh' + myId)
 
 function home(){
-    location.href = `home.html?id=${myId}`;
+    location.href = 'index.html';
     }
 
 
@@ -45,11 +42,11 @@ function home(){
         let todocover = document.querySelector(".todocover");
         todocover.innerHTML = `
         <div id='isloading' style="text-align: center;"></div>
-        <h1>ADMIN</h1>
+        <h1>ADMIN LOGIN</h1>
         <input   id="fname" type='text' placeholder="First name" />
         <input   id="lname" type='text' placeholder="Last name" />
 
-        <button onclick="checkAdminRecord('http://localhost:8001/admins', 0)">LOGIN</button>
+        <button onclick="checkAdminRecord('http://localhost:8001/admins', 0)">ENTER AS ADMIN</button>
         `;         
      }
      
@@ -60,185 +57,35 @@ function home(){
         todocover.innerHTML = `
         <div id='isloading' style="text-align: center;"></div>
         <h1>Credentials </h1>
-        <input   id="username" type='text' placeholder="FirstName MiddleName LastName" />
-        <input   id="pw1" type='text' placeholder="password" />
-
-        <button onclick="checkRecord('http://localhost:8001/StudentsRecords', 0)">LOGIN</button>
-        `;  
-        
-        FetchExamsData('http://localhost:8001/Exams')
-     }
-     
-
-     const regExams = function(){
-        hideSubmenu()
-        let todocover = document.querySelector(".todocover");
-        todocover.innerHTML = `
-        <div id='isloading' style="text-align: center;"></div>
-        <h1>REGISTER EXAMS </h1>
         <input   id="fname" type='text' placeholder="First name" />
-        <input   id="mname" type='text' placeholder="Middle name" />
         <input   id="lname" type='text' placeholder="Last name" />
-        <input   id="pw1" type='password' placeholder="password" />
-        <input   id="pw2" type='password' placeholder="confirm password" />
-
-        <p style="text-align: center; padding:0px 10px">
-        SELECT CLASS
-    </p>
-    <select id="myClasses" onChange="setClassId()">
-        <option value='0' >Select&nbsp;Class</option>
-    </select>
 
         <p style="text-align: center; padding:0px 10px">
         SELECT EXAM
     </p>
     <select id="exams" onChange="setExamId()">
-        <option value='0' >Select&nbsp;Exam</option>
+        <option value='0' >Select Exam</option>
     </select>
-        <button onclick="checkRecordReg('http://localhost:8001/StudentsRecords', 0)">REGISTER</button>
+        <button onclick="checkRecord('http://localhost:8001/StudentsRecords', 0)">ENTER</button>
         `;  
         
         FetchExamsData('http://localhost:8001/Exams')
      }
      
 
+
 const checkRecord =function(url=null, id=null){
-    usernamex=(document.getElementById('username').value).trim();    
-    password1=(document.getElementById('pw1').value).trim();
+
+    fname=(document.getElementById('fname').value).trim();
+    lname=(document.getElementById('lname').value).trim();
     isloading=document.getElementById('isloading');
-    
-    isloading.innerHTML = "...loading..."
-    usernamex = usernamex.replace(/ /g, "");
-    const myRecord = {
-        username: usernamex,
-    }
-    let aUser = null;
-    
-    if(url === null){
-        url = 'http://localhost:8001/StudentsRecords';
-    }
-    
-    if(username !== '' && password1 !== '')
-    {
-        fetch(url)
-        .then(res => {
-            if(!res.ok){
-                throw Error('could not fetch the data for that resource')
-            }
-            return res.json();
-        })
-        .then(data => {
-
-            let i = 0; 
-            let myArra=Object.values(data)
-            if(myArra.length > 0){
-                while(data[i] && i < myArra.length && aUser == null){
-
-                        //alert('checking for user' + myRecord.username);
-                        datax = data[i];
-                    if(datax.username == myRecord.username && aUser !== true){
-                        //alert('found user' + datax);
-
-                        aUser = true;
-                    // console.log(datax)
-                        console.log('aUser='+aUser)
-                        // redirect to quiz
-                        location.href = `home.html?id=${datax.id}&ex=${ExamId}&ok=${datax.score}`; 
-                        return{aUser}
-                    }
-                    i++;     
-                    }
-                
-                    if(aUser == null && i >= (myArra.length-1)){
-                        aUser = false
-                        console.log('aUser='+aUser)
-                        isloading.innerHTML = ""
-                        alert('WRONG CREDENTIALS OR YOU NOT REGISTERED FOR EXAMS')
-                    }
-            }
-            else{
-                isloading.innerHTML = ""
-                alert('WRONG CREDENTIALS OR YOU NOT REGISTERED FOR EXAMS')
-
-            }
-
-        })
-    }
-    else{
-        isloading.innerHTML = ""
-        alert('Please, you should not leave any field empty!')
-    }
-}
-    
-
-const createRecord = function(){
-    fname=(document.getElementById('fname').value).trim();
-    mname=(document.getElementById('mname').value).trim();
-    lname=(document.getElementById('lname').value).trim();
-    password1=(document.getElementById('pw1').value).trim();
-    password2=(document.getElementById('pw2').value).trim();
-    myClass=+(document.getElementById('myClasses').value).trim();
-
-    const myRecord = {
-    firstName: fname,
-    lastName: lname,
-    middleName: mname,
-    username: fname+mname+lname,
-    mypass: password1,
-    classId: 0,
-    isdone: 'no',
-    correct: 0,
-    wrong: 0,
-    score: 0,
-    myExamId:0,
-    myExamName:'',
-    Result:[]
-    }
-
-    let url = 'http://localhost:8001/StudentsRecords';
-
-  if(fname !== '' && lname !== '' && fname !== 0 && lname !== 0 && mname !== 0 && password1 !== 0 && password1 == password2)
-  {
-    const fetchData = async (url) => {
-    await fetch(url, {method: 'POST',
-    headers: {"Content-Type": "application/json"}, 
-    body: JSON.stringify(myRecord)
-    })
-            .then(res => {
-            if(!res.ok){
-                throw Error('could not fetch the data for that resource')
-            }
-            return res.json();
-        })
-    .then(() => {
-        console.log('new record added');
-        isloading.innerHTML = ""
-        alert('REGISTRATION SUCCESSFUL YOU ARE NOW ELIGIBLE TO TAKE EXAMS')
-})
-    }
-fetchData(url)    
-}
-else{
-    isloading.innerHTML = ""
-    alert('Please, you should not leave any field empty!')
-}
-}
-
-//
-const checkRecordReg =function(url=null, id=null){
-    fname=(document.getElementById('fname').value).trim();
-    mname=(document.getElementById('mname').value).trim();
-    lname=(document.getElementById('lname').value).trim();
-    password1=(document.getElementById('pw1').value).trim();
-    password2=(document.getElementById('pw2').value).trim();
-    myClass=(document.getElementById('myClasses').value).trim();
     isloading=document.getElementById('isloading');
    
         isloading.innerHTML = "...loading..."
         const myRecord = {
         firstName: fname,
         lastName: lname,
-        username: fname+mname+lname,
+        username: fname+lname,
         isdone: 'no',
         correct:0,
         wrong:0,
@@ -254,7 +101,13 @@ const checkRecordReg =function(url=null, id=null){
         url = 'http://localhost:8001/StudentsRecords';
         }
 
-    if(fname !== '' && lname !== '' && fname !== 0 && lname !== 0 && mname !== 0 && password1 !== 0 && password1 == password2)
+        // if (id != null || id != 0){
+        //     let search= new URLSearchParams({id: id})
+        //      url = url+'?'+search
+        //  }
+   
+    //alert(url)
+    if(fname !== '' && lname !== '' && fname !== 0 && lname !== 0)
     {
   
             fetch(url)
@@ -305,8 +158,56 @@ const checkRecordReg =function(url=null, id=null){
         }
     
 
+const createRecord = function(){
+    fname=(document.getElementById('fname').value).trim();
+    lname=(document.getElementById('lname').value).trim();
+    const myRecord = {
+    firstName: fname,
+    lastName: lname,
+    username: fname+lname,
+    isdone: 'no',
+    correct: 0,
+    wrong: 0,
+    score: 0,
+    myExamId:0,
+    myExamName:'',
+    Result:[]
 
-//
+    }
+
+    let url = 'http://localhost:8001/StudentsRecords';
+
+  if(fname !== '' && lname !== '' && fname !== 0 && lname !== 0)
+  {
+    const fetchData = async (url) => {
+
+    await fetch(url, {method: 'POST',
+    headers: {"Content-Type": "application/json"}, 
+    body: JSON.stringify(myRecord)
+    })
+            .then(res => {
+            if(!res.ok){
+                throw Error('could not fetch the data for that resource')
+            }
+            return res.json();
+        })
+    .then(() => {
+        console.log('new record added');
+   
+    checkRecord('http://localhost:8001/StudentsRecords')
+})
+
+    }
+fetchData(url)
+    
+}
+else{
+   
+    isloading.innerHTML = ""
+    alert('Please, your names can not be zero or empty!')
+}
+}
+
 const checkAdminRecord =function(url=null, id=null){
 
     fname=(document.getElementById('fname').value).trim();
@@ -583,14 +484,7 @@ useData(id);
             url = 'http://localhost:8001/StudentsRecords';
             //let search= new URLSearchParams({id: myId})
             url = url+'/'+myId
-
-           let newResult=[...myResult.Result, {
-                "myExamName": ExamName,
-                "score": myResult.score,
-                "correct": myResult.correct,
-                "wrong": myResult.wrong 
-            }]
-    
+            //alert(url)
             const fetchData = async (url) => {
            await fetch(url, {method: "PATCH",
             headers: {"Content-Type" : "application/json"},
@@ -601,7 +495,12 @@ useData(id);
                 "isdone": 'yes',
                 "myExamId":ExamId,
                 "myExamName": ExamName,
-                "Result":newResult
+                "Result":[...myResult.Result, {
+                    "myExamName": ExamName,
+                    "score": myResult.score,
+                    "correct": myResult.correct,
+                    "wrong": myResult.wrong
+                }]
             }) 
         })
         .then(res => {
@@ -611,9 +510,9 @@ useData(id);
             return res.json();
         })
         .then(data => {
+           //console.log(data);
+           location.href = `quiz.html?id=${myId}&ex=${ExamId}&ok=${myScore}`; 
             //alert('Thank You For Participating')
-            //console.log(data);
-           //location.href = `quiz.html?id=${myId}&ex=${ExamId}&ok=${myScore}`; 
         })
     }
     fetchData(url)
@@ -632,7 +531,8 @@ const useStartUpdate = function(id){
          url = url+'/'+myId
          alert(url)
          const fetchData = async (url) => {
-            //alert("url= "+url)
+            alert("url= "+url)
+        
          await fetch(url, {method: "PATCH",
          headers: {"Content-Type" : "application/json"},
          body: JSON.stringify({
@@ -657,6 +557,8 @@ const useStartUpdate = function(id){
 }
 
 }
+
+
 
 
 const computeResult = function(){
@@ -687,8 +589,7 @@ const computeResult = function(){
 
 
 const retrieveUserData = function(url, id = null){
-//alert(ExamId+' retrieveUserData ' + id)
-console.log('retrieveUserData')
+//alert(url)
         
 if (id !== null && id !== 0){
     let search= new URLSearchParams({id: id})
@@ -704,16 +605,17 @@ const fetchData = async (url) => {
             return res.json();
         })
         .then(data => {
- 
-           if(ExamId > 0){
-           console.log('myResult '+data.score);
-           myResult.firstName = data.firstName;
-           myResult.lastName = data.lastName;
-           myResult.username = data.username;
-           myResult.myExamId = data.myExamId;
-           myResult.Result = data.Result;
+            //let myArra=Object.values(data)
+           // alert('score '+data[0].score)
+           if(myResult.myExamId == data[0].myExamId){
+           console.log('myResult '+data[0].score);
+           myResult.firstName = data[0].firstName;
+           myResult.lastName = data[0].lastName;
+           myResult.username = data[0].username;
+           myResult.myExamId = data[0].myExamId;
 
-            data.Result && data.Result.map((dataz) => {
+           data && data.map((dataz) => {
+              // alert('retrieveUserData x name1 '+dataz.score)
             if(dataz.myExamName == ExamName){
                 myResult.correct = dataz.correct;
                 myResult.wrong = dataz.wrong;
@@ -721,6 +623,8 @@ const fetchData = async (url) => {
 
             }
            })
+
+           // alert('retrieveUserData score '+data[0].Result.dataz)
 
            console.log('myResult.score'+myResult.score);
            console.log('myResult.wrong '+myResult.wrong);
@@ -1002,16 +906,12 @@ const setExamId = function(){
     //alert('mmm')
     console.log('old ExamId='+ExamId)
     ExamId=document.getElementById('exams').value;
-
     console.log('new ExamId='+ExamId)
     }
 
     const setOrgNane = function(){
         let orName = document.querySelector(".orgname")
         orName.innerHTML = ORGNAME
-        if(MYCLASS == ''){
-            MYCLASS = ORGNAME
-        }
         setFooter()
     }
 
@@ -1064,8 +964,4 @@ const submenu = function(){
 const hideSubmenu = function(){
     let submenu=document.getElementById('submenu');
         submenu.style.display = 'none'
-}
-
-function logout(){
-    location.href = `index.html?`;
 }

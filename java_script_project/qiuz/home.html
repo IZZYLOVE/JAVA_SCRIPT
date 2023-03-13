@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="imgae/x-icon" href="icons/ig-icon.png" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPLE QUIZ WITH JS</title>
+    <script src="home.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        useHomeParams();
+        retrieveOrgName('http://localhost:8001/org')
+
+        });
+        
+    </script>
+
+</head>
+<body ondblclick="hideSubmenu()"> 
+    <header  >
+        <li onclick='home()' class="orgname">OrgName</li>
+        <nav class="navHeader">
+            <li onclick='submenu()'> MENU</li>
+        </nav>
+    </header>
+    <main>
+        <div id="submenu">
+            <div id='demo2' style="display: block;"></div>
+            <div id="subMenumenus"></div>
+            <div id="subMenumenus1"></div>
+            <li onclick="asCandidate()">PROFILE</li>
+            <li onclick="MyExams()">EXAMS</li>
+            <li onclick="myRecords()">RECORDS</li>
+            <li onclick='logout()'> LOGOUT</li>
+        </div>
+        <div class="cover">
+            <div id='demo' style="display: block;">
+               
+            </div><div id='demo2'  style="display: none;"></div>
+            <div id="head"></div>
+            <div id="notice"></div>
+            <div id="body"></div>
+            <div id="result"></div>
+            <div id="root"></div>
+    
+        </div>
+</main>
+<footer id="footer">
+</footer>
+</body>
+</html>
