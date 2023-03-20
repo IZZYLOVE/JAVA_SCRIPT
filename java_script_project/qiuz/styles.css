@@ -6,7 +6,7 @@
 }
 
 
-.todocover input, #exams, #myClasses, .todocover button {
+.todocover input, #exams, .myInput, #myClasses, .todocover button {
     width: 100%;
     height: 3em;
     background-color: rgb(230,230,230);
@@ -142,6 +142,7 @@ footer {
 .todocover button:hover, .cover button:hover, .navHeader li:hover, header li:hover{
  
     background-color: rgb(129,129,129);
+    cursor: pointer;
 
 }
 
@@ -205,6 +206,7 @@ span {
     background-color: rgb(230,230,230);
     border-radius: 5px;
     text-align: center;
+    cursor: pointer;
 
 
 }
@@ -221,17 +223,46 @@ a{
 
 
 .mapBackround1{
-   background-color: rgb(230,230,230);
-   padding: 10px;
-   margin: 10px 0px;
-   border-radius: 10px;
-
-}
-
-.mapBackround2{
-    background-color: rgb(246,237,237);
+    background-color: rgb(230,230,230);
     padding: 10px;
     margin: 10px 0px;
     border-radius: 10px;
+    display: flex;
+ 
+ }
+ 
+ .mapBackround2{
+     background-color: rgb(246,237,237);
+     padding: 10px;
+     margin: 10px 0px;
+     border-radius: 10px;
+     display: flex;
+ 
+ }
+ 
+ .mapBackround10{
+    background-color: rgb(230,230,230);
+    padding: 10px;
+    margin: 10px 0px;
+    border-radius: 10px;
+    /* display: flex;
+  */
+ }
+ 
+ .mapBackround20{
+     background-color: rgb(246,237,237);
+     padding: 10px;
+     margin: 10px 0px;
+     border-radius: 10px;
+     /* display: flex; */
+ 
+ }
 
-}
+ .mapBackroundButton{
+    background-color: white;
+    cursor: pointer;
+ }
+
+ .mapBackroundButton:hover{
+    background-color: rgb(129,129,129);
+ }

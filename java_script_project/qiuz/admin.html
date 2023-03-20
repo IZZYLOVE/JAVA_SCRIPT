@@ -13,6 +13,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             useAdminsParams();
             retrieveOrgName('http://localhost:8001/org')
+            
 
     });
 
@@ -38,9 +39,9 @@
         <div id="submenu">
             <div id='demo2' style="display: block;"></div>
             <div id="subMenumenus"></div>
-            <div id="subMenumenus1"></div>
             <li onclick='setAdminData()'>EXAMS</li>
             <li onclick='candidatesRecords()'>RECORDS</li>
+            <div id="subMenumenus1"></div>
             <li onclick='logout()'> LOGOUT</li>
         </div>
         <div id='demo' style="display: flex; justify-content: end; padding: 3px 10px;"></div>

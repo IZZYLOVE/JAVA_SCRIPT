@@ -29,18 +29,20 @@ var ExamId = 0
 var ExamName = ''
 var Examtime = 0;
 var ORGNAME = 'OrgName'
-var MYCLASS = ''
+var MYCLASS = 0
+var EXAMDONE = 'no'
 
 
 
 //alert('nh' + myId)
 
+
 function home(){
     location.href = `home.html?id=${myId}`;
-    }
+}
 
 
-    const asAdmin = function(){
+const asAdmin = function(){
         hideSubmenu()
         let todocover = document.querySelector(".todocover");
         todocover.innerHTML = `
@@ -48,13 +50,13 @@ function home(){
         <h1>ADMIN</h1>
         <input   id="fname" type='text' placeholder="First name" />
         <input   id="lname" type='text' placeholder="Last name" />
-
+        
         <button onclick="checkAdminRecord('http://localhost:8001/admins', 0)">LOGIN</button>
         `;         
-     }
+    }
      
-
-     const asCandidate = function(){
+    
+    const asCandidate = function(){
         hideSubmenu()
         let todocover = document.querySelector(".todocover");
         todocover.innerHTML = `
@@ -67,10 +69,10 @@ function home(){
         `;  
         
         FetchExamsData('http://localhost:8001/Exams')
-     }
-     
-
-     const regExams = function(){
+    }
+    
+    
+    const regExams = function(){
         hideSubmenu()
         let todocover = document.querySelector(".todocover");
         todocover.innerHTML = `
@@ -81,12 +83,12 @@ function home(){
         <input   id="lname" type='text' placeholder="Last name" />
         <input   id="pw1" type='password' placeholder="password" />
         <input   id="pw2" type='password' placeholder="confirm password" />
-
+        
         <p style="text-align: center; padding:0px 10px">
         SELECT CLASS
     </p>
     <select id="myClasses" onChange="setClassId()">
-        <option value='0' >Select&nbsp;Class</option>
+    <option value='0' >Select&nbsp;Class</option>
     </select>
 
         <p style="text-align: center; padding:0px 10px">
@@ -94,16 +96,16 @@ function home(){
     </p>
     <select id="exams" onChange="setExamId()">
         <option value='0' >Select&nbsp;Exam</option>
-    </select>
+        </select>
         <button onclick="checkRecordReg('http://localhost:8001/StudentsRecords', 0)">REGISTER</button>
         `;  
         
         FetchExamsData('http://localhost:8001/Exams')
      }
      
-
-const checkRecord =function(url=null, id=null){
-    usernamex=(document.getElementById('username').value).trim();    
+     
+     const checkRecord =function(url=null, id=null){
+         usernamex=(document.getElementById('username').value).trim();    
     password1=(document.getElementById('pw1').value).trim();
     isloading=document.getElementById('isloading');
     
@@ -134,13 +136,13 @@ const checkRecord =function(url=null, id=null){
             if(myArra.length > 0){
                 while(data[i] && i < myArra.length && aUser == null){
 
-                        //alert('checking for user' + myRecord.username);
-                        datax = data[i];
+                    //alert('checking for user' + myRecord.username);
+                    datax = data[i];
                     if(datax.username == myRecord.username && aUser !== true){
                         //alert('found user' + datax);
-
+                        
                         aUser = true;
-                    // console.log(datax)
+                        // console.log(datax)
                         console.log('aUser='+aUser)
                         // redirect to quiz
                         location.href = `home.html?id=${datax.id}&ex=${ExamId}&ok=${datax.score}`; 
@@ -155,13 +157,13 @@ const checkRecord =function(url=null, id=null){
                         isloading.innerHTML = ""
                         alert('WRONG CREDENTIALS OR YOU NOT REGISTERED FOR EXAMS')
                     }
-            }
-            else{
-                isloading.innerHTML = ""
+                }
+                else{
+                    isloading.innerHTML = ""
                 alert('WRONG CREDENTIALS OR YOU NOT REGISTERED FOR EXAMS')
 
             }
-
+            
         })
     }
     else{
@@ -169,7 +171,7 @@ const checkRecord =function(url=null, id=null){
         alert('Please, you should not leave any field empty!')
     }
 }
-    
+
 
 const createRecord = function(){
     fname=(document.getElementById('fname').value).trim();
@@ -178,10 +180,10 @@ const createRecord = function(){
     password1=(document.getElementById('pw1').value).trim();
     password2=(document.getElementById('pw2').value).trim();
     myClass=+(document.getElementById('myClasses').value).trim();
-
+    
     const myRecord = {
-    firstName: fname,
-    lastName: lname,
+        firstName: fname,
+        lastName: lname,
     middleName: mname,
     username: fname+mname+lname,
     mypass: password1,
@@ -199,22 +201,22 @@ const createRecord = function(){
 
   if(fname !== '' && lname !== '' && fname !== 0 && lname !== 0 && mname !== 0 && password1 !== 0 && password1 == password2)
   {
-    const fetchData = async (url) => {
-    await fetch(url, {method: 'POST',
-    headers: {"Content-Type": "application/json"}, 
-    body: JSON.stringify(myRecord)
+      const fetchData = async (url) => {
+          await fetch(url, {method: 'POST',
+          headers: {"Content-Type": "application/json"}, 
+          body: JSON.stringify(myRecord)
     })
-            .then(res => {
-            if(!res.ok){
+    .then(res => {
+        if(!res.ok){
                 throw Error('could not fetch the data for that resource')
             }
             return res.json();
         })
-    .then(() => {
+        .then(() => {
         console.log('new record added');
         isloading.innerHTML = ""
         alert('REGISTRATION SUCCESSFUL YOU ARE NOW ELIGIBLE TO TAKE EXAMS')
-})
+    })
     }
 fetchData(url)    
 }
@@ -233,9 +235,9 @@ const checkRecordReg =function(url=null, id=null){
     password2=(document.getElementById('pw2').value).trim();
     myClass=(document.getElementById('myClasses').value).trim();
     isloading=document.getElementById('isloading');
-   
-        isloading.innerHTML = "...loading..."
-        const myRecord = {
+    
+    isloading.innerHTML = "...loading..."
+    const myRecord = {
         firstName: fname,
         lastName: lname,
         username: fname+mname+lname,
@@ -248,17 +250,17 @@ const checkRecordReg =function(url=null, id=null){
     }
     let aUser = null;
 
-  
+    
 
          if(url === null){
         url = 'http://localhost:8001/StudentsRecords';
         }
-
+        
     if(fname !== '' && lname !== '' && fname !== 0 && lname !== 0 && mname !== 0 && password1 !== 0 && password1 == password2)
     {
   
-            fetch(url)
-            .then(res => {
+        fetch(url)
+        .then(res => {
                 if(!res.ok){
                     throw Error('could not fetch the data for that resource')
                 }
@@ -269,15 +271,15 @@ const checkRecordReg =function(url=null, id=null){
                 // data && data.map((datax, i) => {
                 let i = 0; 
                 let myArra=Object.values(data)
-               //alert("data len "+ data +' ggg '+ myArra.length )
-               while(data[i] && i < myArra.length && aUser == null){
-
+                //alert("data len "+ data +' ggg '+ myArra.length )
+                while(data[i] && i < myArra.length && aUser == null){
+                    
                     //alert('checking for user' + myRecord.username);
                     datax = data[i];
-                   if(datax.username == myRecord.username && aUser !== true){
-                    //alert('found user' + datax);
-
-                    aUser = true;
+                    if(datax.username == myRecord.username && aUser !== true){
+                        //alert('found user' + datax);
+                        
+                        aUser = true;
                    // console.log(datax)
                     console.log('aUser='+aUser)
                     // redirect to quiz
@@ -298,40 +300,40 @@ const checkRecordReg =function(url=null, id=null){
 
         }
         else{
-           
+            
             isloading.innerHTML = ""
             alert('Please, your names can not be zero or empty!')
         }
-        }
+    }
+    
     
 
-
-//
-const checkAdminRecord =function(url=null, id=null){
+    //
+    const checkAdminRecord =function(url=null, id=null){
 
     fname=(document.getElementById('fname').value).trim();
     lname=(document.getElementById('lname').value).trim();
     isloading=document.getElementById('isloading');
     isloading.innerHTML = "...loading..."
-        const myAdminRecord = {
+    const myAdminRecord = {
         firstName: fname,
         lastName: lname,
         adminusername: fname+lname,
         rank: 0
     }
     let anAdmin = null;
-
-  
+    
+    
 
          if(url === null){
-        url = 'http://localhost:8001/Admin';
-        }
-
+             url = 'http://localhost:8001/Admin';
+            }
+            
         // if (id != null || id != 0){
-        //     let search= new URLSearchParams({id: id})
+            //     let search= new URLSearchParams({id: id})
         //      url = url+'?'+search
         //  }
-   
+        
     //alert(url)
     if(fname !== '' && lname !== '' && fname !== 0 && lname !== 0)
     {
@@ -347,16 +349,16 @@ const checkAdminRecord =function(url=null, id=null){
             .then(data => {
                  //console.log(data);
                 // data && data.map((datax, i) => {
-                let i = 0; 
-                let myArra=Object.values(data)
-               //alert("data len "+ data +' ggg '+ myArra.length )
-               while(data[i] && i < myArra.length && anAdmin == null){
-
-                    //alert('checking for user' + myRecord.username);
-                    datax = data[i];
+                    let i = 0; 
+                    let myArra=Object.values(data)
+                    //alert("data len "+ data +' ggg '+ myArra.length )
+                    while(data[i] && i < myArra.length && anAdmin == null){
+                        
+                        //alert('checking for user' + myRecord.username);
+                        datax = data[i];
                    if(datax.adminusername ==  myAdminRecord.adminusername && anAdmin !== true){
-                    //alert('found admin' + datax);
-
+                       //alert('found admin' + datax);
+                       
                     anAdmin = true;
                    // console.log(datax)
                     console.log('anAdmin='+anAdmin)
@@ -374,26 +376,26 @@ const checkAdminRecord =function(url=null, id=null){
                 isloading.innerHTML = ""
                 alert("wrong credential")
             }
-            })
-        }
-        fetchData(url)
+        })
+    }
+    fetchData(url)
         }
         else{
 
-                isloading.innerHTML = ""
+            isloading.innerHTML = ""
             alert('Please, your names can not be zerong.. or empty!')
         }
         }
     
 
-const retrievedata = function(url, id = null){
-//alert(url)
+        const retrievedata = function(url, id = null){
+            //alert(url)
     
     if (id !== null && id !== 0){
         url = url+id
     }
-//alert(url)
-const fetchData = async (url) => {
+    //alert(url)
+    const fetchData = async (url) => {
         await fetch(url)
         .then(res => {
             if(!res.ok){
@@ -402,24 +404,24 @@ const fetchData = async (url) => {
             return res.json();
         })
         .then(data => {
-          // console.log(data);
-           shuffleData=data.sort(function(){return Math.random()-0.5;})     
+            // console.log(data);
+            shuffleData=data.sort(function(){return Math.random()-0.5;})     
             data =shuffleData;
-
+            
             Dataz = data;
             isData ='yes' 
         })
     }
     fetchData(url)
-
+    
 
     }
-
-
+    
+    
 
 
 const useData = function(id){
-   // alert('useData bbhh')
+    // alert('useData bbhh')
     let data = Dataz;
     //alert(data +' hhh'+id)
     let head = document.getElementById('head');
@@ -430,9 +432,9 @@ const useData = function(id){
     head.innerHTML = `<p class='examp'><h3>QUESTION ${id} of ${TotalQuestion}</h3>`;
     // data && data.map((data, i) => {
         // console.log(data);
-     
-       if(data && data[id-1] && id <= TotalQuestion){
-       
+        
+        if(data && data[id-1] && id <= TotalQuestion){
+            
             datax = data[id-1];
             datax.question=revert(datax.question)
             datax.option1=revert(datax.option1)
@@ -452,7 +454,7 @@ const useData = function(id){
         body.innerHTML += `<div class='options'  >
         <input type="radio" id="option3" onclick="enablebutton()" name="options" value="${datax.option3}">
         <label class='options' for="option3">${datax.option3}</label>
-      </div>`;            
+        </div>`;            
       body.innerHTML += `<div class='options'  >
       <input type="radio" id="option4" onclick="enablebutton()" name="options" value="${datax.option4}">
       <label class='options' for="option4">${datax.option4}</label>
@@ -470,8 +472,8 @@ const useData = function(id){
         body.innerHTML = `<label>THANK YOU FOR PARTICIPATING </label>`;
         root.innerHTML = `<p>Do have a nice day.</p>
                         <button onclick='home()'>HOME</button>`;
-        //alert("useData wants to call computeResult()")
-        mySubmited == 'on'
+                        //alert("useData wants to call computeResult()")
+                        mySubmited == 'on'
          computeResult();
         }
         }
@@ -482,7 +484,7 @@ const useData = function(id){
 const useData2 = function(id){
    // alert('useData2 bbhh')
 
-
+   
     let data = Dataz;
     //alert(data +' hhh'+id)
     let head = document.getElementById('head');
@@ -491,12 +493,12 @@ const useData2 = function(id){
     let notice=document.getElementById('notice');
     body.innerHTML = '',
     
-        head.innerHTML = `<h2>GREAT, ${myResult.firstName.toUpperCase()} ${myResult.lastName.toUpperCase()}</h2>
-        <h3>YOU ARE DONE WITH THIS ${ExamName.toUpperCase()} QUIZ/EXAM</h3>`;
-        notice.innerHTML = `<label>THANK YOU FOR PARTICIPATING </label>`;
-        root.innerHTML = `<p>Do have a nice day.</p>
-                        <button onclick='home()'> HOME</button>`;
-        
+    head.innerHTML = `<h2>GREAT, ${myResult.firstName.toUpperCase()} ${myResult.lastName.toUpperCase()}</h2>
+    <h3>YOU ARE DONE WITH THIS ${ExamName.toUpperCase()} QUIZ/EXAM</h3>`;
+    notice.innerHTML = `<p>THANK YOU FOR PARTICIPATING </p>`;
+    root.innerHTML = `<p>Do have a nice day.</p>
+    <button onclick='home()'> HOME</button>`;
+    
 }
 
 
@@ -506,22 +508,22 @@ const checkAnswer = function(id){
     //console.log('vvv'+Dataz)
     //alert('checkAnswer')
     let id2 = id - 1;
-       if(datax == null){
+    if(datax == null){
         datax=[];
 
-       } 
-
-        else if(id2 <= Dataz.length){
-
-
+    } 
+    
+    else if(id2 <= Dataz.length){
+        
+        
 
         let optionx = vstatus ='';
         let ele = document.getElementsByName('options');
         let i;
         for(i = 0; i < ele.length; i++) {
             if(ele[i].checked){
-            optionx =  ele[i].value;
-            // document.getElementById("result").innerHTML
+                optionx =  ele[i].value;
+                // document.getElementById("result").innerHTML
             // = " Gender: "+optionx;
             //alert('aaa'+ datax.Correctanswer+  '  hh   ' + optionx)
             break;
@@ -529,7 +531,7 @@ const checkAnswer = function(id){
     }
     //alert('saved answer='+datax.Correctanswer)
     datax.Correctanswer=revert(datax.Correctanswer)
-
+    
     if(datax.Correctanswer == optionx)
     {
         //alert('Correct answer')
@@ -538,11 +540,11 @@ const checkAnswer = function(id){
         myResult.score += 20
         myScore= myResult.score
         console.log(myResult);
-
+        
     }else{
        // alert('wrong answer')
-        vstatus = 'wrong';
-        myResult.wrong += 1
+       vstatus = 'wrong';
+       myResult.wrong += 1
        // console.log(myResult);
     }
 
@@ -557,11 +559,13 @@ useData(id);
     }
 
 
-
+    
     const useParams = function(){
         let params = (new URL(document.location)).searchParams;
         myId = params.get('id');
         ok = myScore = params.get('ok');
+        MYCLASS = params.get('cl');
+        //alert(MYCLASS)
         myResult.myExamId=ExamId = params.get('ex');
         console.log("examId="+ExamId)
         console.log("myscore="+myScore)
@@ -575,7 +579,9 @@ useData(id);
 
     
     const useUpdate = function(id){
-        //alert('useUpdate sub='+ mySubmit)
+        if(MYCLASS == 0){
+            home()
+        }
         if(myResult.score == 0 && mySubmit == 'off'){mySubmit = 'on'}
         //alert('useUpdate upsub='+ mySubmit )
         
@@ -585,15 +591,16 @@ useData(id);
             url = url+'/'+myId
 
            let newResult=[...myResult.Result, {
-                "myExamName": ExamName,
-                "score": myResult.score,
+               "myExamName": ExamName,
+               "score": myResult.score,
                 "correct": myResult.correct,
-                "wrong": myResult.wrong 
+                "wrong": myResult.wrong,
+                "class": MYCLASS
             }]
     
             const fetchData = async (url) => {
            await fetch(url, {method: "PATCH",
-            headers: {"Content-Type" : "application/json"},
+           headers: {"Content-Type" : "application/json"},
             body: JSON.stringify({
                 "score": myResult.score,
                 "correct": myResult.correct,
@@ -611,9 +618,11 @@ useData(id);
             return res.json();
         })
         .then(data => {
-            //alert('Thank You For Participating')
+            alert('Thank You For Participating' + myResult.score)
             //console.log(data);
-           //location.href = `quiz.html?id=${myId}&ex=${ExamId}&ok=${myScore}`; 
+            EXAMDONE = 'yes'
+            useData()
+            
         })
     }
     fetchData(url)
@@ -623,37 +632,37 @@ useData(id);
 
 const useStartUpdate = function(id){
     // alert('useUpdate sub='+ mySubmit)
-     if(myResult.score == 0 && mySubmit == 'off'){mySubmit = 'on'}
+    if(myResult.score == 0 && mySubmit == 'off'){mySubmit = 'on'}
     // alert('useUpdate upsub='+ mySubmit )
      
      if(mySubmit == 'on'){
          url = 'http://localhost:8001/StudentsRecords';
          //let search= new URLSearchParams({id: myId})
          url = url+'/'+myId
-         alert(url)
+         //alert(url)
          const fetchData = async (url) => {
             //alert("url= "+url)
          await fetch(url, {method: "PATCH",
          headers: {"Content-Type" : "application/json"},
          body: JSON.stringify({
-            "isdone": 'yes'
+             "isdone": 'yes'
          })
          
          
-     })
-     .then(res => {
-         if(!res.ok){
-             throw Error('could not fetch the data for that resource')
-         }
+        })
+        .then(res => {
+            if(!res.ok){
+                throw Error('could not fetch the data for that resource')
+            }
          return res.json();
-     })
-     .then(data => {
+        })
+        .then(data => {
         console.log(data);
-   
-     })
+        
+    })
     }
     fetchData(url)
-
+    
 }
 
 }
@@ -663,9 +672,9 @@ const computeResult = function(){
     // if(use_Data == 'on'){
         //     use_Data='off'
         if( myResult.score > 0 || myScore > 0){
-        myResult.score = (myResult.correct / (TotalQuestion))* 100;
-        document.getElementById("result").innerHTML
-         = `you have ${myResult.correct} correct answer(s) and ${myResult.wrong} wrong answer(s), you scored ${myResult.score}%`;
+            myResult.score = (myResult.correct / (TotalQuestion))* 100;
+            document.getElementById("result").innerHTML
+            = `you have ${myResult.correct} correct answer(s) and ${myResult.wrong} wrong answer(s), you scored ${myResult.score}%`;
          console.log(myResult);
         }
         // alert(myScore +' aa '+ myResult.score + 'use_Update ' + use_Update )
@@ -679,15 +688,15 @@ const computeResult = function(){
             useData()
         }
         else{
-           // alert('computeResult  wants to call useData2()')
+            // alert('computeResult  wants to call useData2()')
             useData2() 
         }
         // }
     }
+    
 
-
-const retrieveUserData = function(url, id = null){
-//alert(ExamId+' retrieveUserData ' + id)
+    const retrieveUserData = function(url, id = null){
+        //alert(ExamId+' retrieveUserData ' + id)
 console.log('retrieveUserData')
         
 if (id !== null && id !== 0){
@@ -696,7 +705,7 @@ if (id !== null && id !== 0){
 }
 //alert(url)
 const fetchData = async (url) => {
-       await fetch(url)
+    await fetch(url)
         .then(res => {
             if(!res.ok){
                 throw Error('could not fetch the data for that resource')
@@ -706,19 +715,19 @@ const fetchData = async (url) => {
         .then(data => {
  
            if(ExamId > 0){
-           console.log('myResult '+data.score);
+               console.log('myResult '+data.score);
            myResult.firstName = data.firstName;
            myResult.lastName = data.lastName;
            myResult.username = data.username;
            myResult.myExamId = data.myExamId;
            myResult.Result = data.Result;
-
+           
             data.Result && data.Result.map((dataz) => {
             if(dataz.myExamName == ExamName){
                 myResult.correct = dataz.correct;
                 myResult.wrong = dataz.wrong;
                 myResult.score = dataz.score;
-
+                
             }
            })
 
@@ -728,18 +737,15 @@ const fetchData = async (url) => {
            if(use_Update == 'on' && myResult.score > 0){
                 use_Update = 'off'
                 console.log(use_Update)
-                
-            // alert('retrieveUserData is calling computeResult')  
                 computeResult()
             }
         }
-        })
+    })
     }
-    fetchData(url)
-               
+    fetchData(url)            
 }
-        
- 
+
+
             
 const enablebutton = function(){
     let button = document.getElementById('mybutton');
@@ -748,7 +754,7 @@ const enablebutton = function(){
 
 
 const startQuiz = function(){
-   myTime= (new Date().getTime() + (Examtime*60*1000)+(2*1000)),
+    myTime= (new Date().getTime() + (Examtime*60*1000)+(2*1000)),
 // alert(myTime +' - '+ new Date().getTime() + ' = '+ (myTime -new Date().getTime()) ),
     fint(),
     checkAnswer(1)
@@ -762,8 +768,8 @@ const startQuiz = function(){
           //  <div id='demo'><div id='demo'></div><script>
  var x; var myTime; var runCountdown = 'on'
  function countdown(){
-    var expire= myTime;
-             
+     var expire= myTime;
+     
               
               
     // Get todays date and time
@@ -776,9 +782,9 @@ const startQuiz = function(){
   var distance = expire - now;
   
   // Time calculations for days, hours, minutes and seconds
-
- var daysx =  distance / (60 * 60 * 24);
-
+  
+  var daysx =  distance / (60 * 60 * 24);
+  
 var days=Math.floor(daysx/1000);
   
 
@@ -792,19 +798,19 @@ if(days>1){
     //min
     var distance1h= distance1d - (hours*(60 * 60)*1000);
  var minutesx = (distance1h /  60);		
-var minutes = Math.floor(minutesx /1000);	
+ var minutes = Math.floor(minutesx /1000);	
 
-//sec
+ //sec
 var distance1m= distance1h - (minutes*(60)*1000);	
 var secondsx = distance1m -(60);	
 var seconds = Math.floor(secondsx/1000);
- 
+
 if(seconds<10){var ps=0;}else{var ps='';}
 if(minutes<10){var pm=0;}else{var pm='';}
 if(hours<10){var ph=0;}else{var ph='';}
-  
- 
- 
+
+
+
  // Display the result in the element with id='demo'
   document.getElementById('demo').innerHTML = days + 'days, ' + ph+hours + ':'
   +pm+minutes+ ':' +ps+seconds + 's ';  	
@@ -812,7 +818,7 @@ if(hours<10){var ph=0;}else{var ph='';}
 
 
 else if(days==1){
-
+    
     //hr 
     var distance1d = distance - (days*(60 * 60 * 24)*1000);
     var hoursx = distance1d / ( 60 * 60);
@@ -820,28 +826,28 @@ else if(days==1){
     
     //min
     var distance1h= distance1d - (hours*(60 * 60)*1000);
- var minutesx = (distance1h /  60);		
-var minutes = Math.floor(minutesx /1000);	
+    var minutesx = (distance1h /  60);		
+    var minutes = Math.floor(minutesx /1000);	
 
-//sec
-var distance1m= distance1h - (minutes*(60)*1000);	
+    //sec
+    var distance1m= distance1h - (minutes*(60)*1000);	
 var secondsx = distance1m -(60);	
 var seconds = Math.floor(secondsx/1000);
- 
+
 if(seconds<10){var ps=0;}else{var ps='';}
 if(minutes<10){var pm=0;}else{var pm='';}
 if(hours<10){var ph=0;}else{var ph='';}
  
  
- 
- // Display the result in the element with id='demo'
-  document.getElementById('demo').innerHTML = days + 'day, ' +ph+hours + ':'
-  +pm+minutes+ ':' +ps+seconds + 's ';  
-  
+
+// Display the result in the element with id='demo'
+document.getElementById('demo').innerHTML = days + 'day, ' +ph+hours + ':'
++pm+minutes+ ':' +ps+seconds + 's ';  
+
         
 }
 
-  
+
 else if(days<1 & distance>=3601000){
     
  var hoursx =  distance / (60 * 60 );
@@ -863,8 +869,8 @@ if(seconds<10){var ps=0;}else{var ps='';}
 if(minutes<10){var pm=0;}else{var pm='';}
 if(hours<10){var ph=0;}else{var ph='';}
 
- 
- // Display the result in the element with id='demo'
+
+// Display the result in the element with id='demo'
   document.getElementById('demo').innerHTML =  ph+hours + ':'
   +pm+minutes+ ':' +ps+seconds + 's ';  
   
@@ -876,25 +882,25 @@ else if( distance < 3601000){
     //alert( distance )
     
     //for minutes
-        
- var minutesx =  distance / (60 );
-var minutes=Math.floor(minutesx /1000);	
+    
+    var minutesx =  distance / (60 );
+    var minutes=Math.floor(minutesx /1000);	
     
     
     var distance1m= distance - ((minutes)*60*1000);	
-var seconds = Math.floor(distance1m /1000);
-
-if(seconds<10){var ps=0;}else{var ps='';}
-if(minutes<10){var pm=0;}else{var pm='';}
-
- 
+    var seconds = Math.floor(distance1m /1000);
     
-//alert('minutes: '+minutes+ ' seconds: '+seconds );
+    if(seconds<10){var ps=0;}else{var ps='';}
+    if(minutes<10){var pm=0;}else{var pm='';}
 
- // Display the result in the element with id='demo'
+    
+    
+    //alert('minutes: '+minutes+ ' seconds: '+seconds );
+    
+    // Display the result in the element with id='demo'
   document.getElementById('demo').innerHTML = pm+minutes+ ':' +ps+seconds + 's ';  
   
- 
+  
 
 }
 
@@ -907,13 +913,16 @@ if(minutes<10){var pm=0;}else{var pm='';}
     document.getElementById('renew').style.display='none';
   } 
   
-    }
+}
 
 //interval control 
 function checkTime(){
    let nowx = new Date().getTime();
-  // alert( myTime - nowx)
-    if(myTime > nowx){
+   // alert( myTime - nowx)
+     if(EXAMDONE === 'yes'){
+
+     }
+     else if(myTime > nowx){
         countdown(); 
     }
     else if(myTime < nowx && runCountdown == 'on'){
@@ -937,20 +946,20 @@ x=setInterval('checkTime();' ,1000);
 //timer ends 
 
 
- const FetchExamsData = function(url){
+const FetchExamsData = function(url){
     const fetchData = async (url) => {
         await fetch(url)
-         .then(res => {
-             if(!res.ok){
+        .then(res => {
+            if(!res.ok){
                  throw Error('could not fetch the data for that resource')
              }
              return res.json();
-         })
+            })
          .then(data => {
-                 listExams(data)
-         })
-     }
-     fetchData(url)                    
+             listExams(data)
+            })
+        }
+        fetchData(url)                    
 }
 
 const retrieveExamData = function(url, id = null){
@@ -964,13 +973,13 @@ const retrieveExamData = function(url, id = null){
          .then(res => {
              if(!res.ok){
                  throw Error('could not fetch the data for that resource')
-             }
-             return res.json();
-         })
+                }
+                return res.json();
+            })
          .then(data => {
             console.log('examData='+data)
 
-    //alert('retrieveExamData nnn'+data[0].exam)
+            //alert('retrieveExamData nnn'+data[0].exam)
 
             if(ExamId == data[0].id && ExamName == ''){
                 ExamName = data[0].exam;
@@ -984,17 +993,17 @@ const retrieveExamData = function(url, id = null){
                 checkAnswer(1);  
             }
          })
-     }
+        }
      fetchData(url)                    
 }
 
 const listExams = function(data){
-//alert('mmm')
+    //alert('mmm')
 //console.log(data)
     exams=document.getElementById('exams');
-data && data.map((datax) => {    
-    exams.innerHTML += `<option value='${datax.id}' >${datax.exam}</option>`
-})
+    data && data.map((datax) => {    
+        exams.innerHTML += `<option value='${datax.id}' >${datax.exam}</option>`
+    })
 }
 
 
@@ -1002,11 +1011,11 @@ const setExamId = function(){
     //alert('mmm')
     console.log('old ExamId='+ExamId)
     ExamId=document.getElementById('exams').value;
-
+    
     console.log('new ExamId='+ExamId)
-    }
+}
 
-    const setOrgNane = function(){
+const setOrgNane = function(){
         let orName = document.querySelector(".orgname")
         orName.innerHTML = ORGNAME
         if(MYCLASS == ''){
@@ -1014,41 +1023,41 @@ const setExamId = function(){
         }
         setFooter()
     }
-
+    
     const setFooter = function(){
     let DATE = new Date()
     let YY = DATE.getFullYear()
     let footer = document.getElementById('footer')
     footer.innerHTML += `&copy;&nbsp;${ORGNAME}&nbsp;${YY}`
-    }
+}
 
     
 const retrieveOrgName= function(url){
     const fetchData = async (url) => {
         await fetch(url)
-         .then(res => {
-             if(!res.ok){
-                 throw Error('could not fetch the data for that resource')
+        .then(res => {
+            if(!res.ok){
+                throw Error('could not fetch the data for that resource')
              }
              return res.json();
-         })
-         .then(data => {
+            })
+            .then(data => {
             ORGNAME = data;
             setOrgNane()
          })
-     }
+        }
      fetchData(url)                    
 }
 
 function revert(str)
 {
-  str = str.replace(/xodivx/g, "<div class='examx'>");
+    str = str.replace(/xodivx/g, "<div class='examx'>");
   str = str.replace(/xopx/g, "<p>");
   str = str.replace(/xcdivx/g, "</div>");
   str = str.replace(/xcpx/g, "</p>");
   str = str.replace(/xtabx/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
   str = str.replace(/xbrx/g, "<br />");
- 
+  
   return str;
 }
 
@@ -1063,7 +1072,7 @@ const submenu = function(){
 
 const hideSubmenu = function(){
     let submenu=document.getElementById('submenu');
-        submenu.style.display = 'none'
+    submenu.style.display = 'none'
 }
 
 function logout(){
